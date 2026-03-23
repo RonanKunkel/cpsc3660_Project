@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS vehicle (
     interior_color VARCHAR(20),
     miles INT UNSIGNED,
     style ENUM('Coupe', 'Sedan', 'Hatchback', 'Pickup', 'Van', 'SUV', 'Wagon'),
-    condition ENUM('Excellent', 'Light Wear', 'Moderate Wear', 'Abused'),
+    vehicle_condition ENUM('Excellent', 'Light Wear', 'Moderate Wear', 'Abused'),
     book_price DECIMAL(10,2),
 
     PRIMARY KEY (vin)
@@ -125,6 +125,23 @@ CREATE TABLE IF NOT EXISTS repair (
     FOREIGN KEY (purchase_id) REFERENCES purchase(id)
 );
 
+INSERT INTO vehicle (vin, make, model, year, color, interior_color, miles, style, vehicle_condition, book_price) VALUES
+    ('KL1TD56E59B639081', 'BMW', '328i xDrive', 2011, 'Alpine White', 'Brown', 190000, 'Wagon', 'Light Wear', 8500.00),
+    ('1XKAD29X8KJ533154', 'Ford', 'Taurus', 2006, 'Light Brown', 'Brown', 225000, 'Sedan', 'Moderate Wear', 3200.00),
+    ('JN1BV7AP9EM658367', 'Mitsubishi', 'Lancer SE', 2011, 'Silver', 'Grey', 195000, 'Sedan', 'Light Wear', 6800.00),
+    ('WDDKJ7CB3AF093094', 'BMW', '328d xDrive', 2015, 'Glacier Silver', 'Black', 190000, 'Sedan', 'Light Wear', 12000.00),
+    ('1FDAF56P66EC10260', 'Mercedes-Benz', 'C400 4MATIC', 2015, 'Silver', 'White', 90000, 'Sedan', 'Excellent', 18500.00),
+    ('3VWSS29M51M026061', 'Dodge', 'Ram 3500', 2002, 'White', 'Black', 250000, 'Pickup', 'Moderate Wear', 5200.00),
+    ('3MZBM1L73EM140749', 'BMW', 'X5 M', 2013, 'Black', 'Black', 150000, 'SUV', 'Light Wear', 15000.00),
+    ('KNDJF723067190739', 'Chevrolet', 'Camaro RWD V6', 2012, 'Red', 'Black', 170000, 'Coupe', 'Light Wear', 11200.00),
+    ('JN1CV6AR8BM445759', 'Toyota', 'Camry 3.5', 2008, 'Tan', 'Brown', 140000, 'Sedan', 'Light Wear', 7500.00),
+    ('3LNHM28T47R679651', 'Audi', 'A5 S Line Quattro', 2014, 'Black', 'Black', 205000, 'Coupe', 'Light Wear', 13000.00),
+    ('WVWDB7AJ1EW026333', 'Honda', 'Accord', 2007, 'Silver', 'Black', 190000, 'Coupe', 'Light Wear', 5500.00),
+    ('JF2GPACC8F8202795', 'Audi', 'Q7', 2007, 'Silver', 'Black', 265000, 'SUV', 'Moderate Wear', 9000.00),
+    ('1GTR2VE7XDZ216668', 'Toyota', '4Runner', 1999, 'White', 'Black', 225000, 'SUV', 'Moderate Wear', 6500.00),
+    ('WAUAF78E58A025863', 'Cadillac', 'Escalade', 2010, 'White', 'Brown', 185000, 'SUV', 'Light Wear', 14000.00),
+    ('1GKLVNED8AJ284520', 'Infiniti', 'G37s', 2008, 'Grey', 'Black', 185000, 'Coupe', 'Light Wear', 10000.00);
+
 INSERT INTO purchase (vin, purchase_date, location, auction, seller, price_paid) VALUES
     ('KL1TD56E59B639081', '2025-10-15', 'Calgary Auction House', 'Copart', 'Jane Smith', 4500.00),
     ('1XKAD29X8KJ533154', '2025-10-20', 'Calgary Auto Auction', 'IAA', 'Robert Johnson', 550.00),
@@ -170,22 +187,25 @@ INSERT INTO repair (purchase_id, description, estimated_cost, actual_cost) VALUE
     (14, 'Differential Service', 200.00, 225.00),
     (15, 'Fuel Injector Cleaning', 250.00, 300.00);
 
-INSERT INTO vehicle (vin, make, model, year, color, interior_color, miles, style, condition, book_price) VALUES
-    ('KL1TD56E59B639081', 'BMW', '328i xDrive', 2011, 'Alpine White', 'Brown', 190000, 'Wagon', 'Light Wear', 8500.00),
-    ('1XKAD29X8KJ533154', 'Ford', 'Taurus', 2006, 'Light Brown', 'Brown', 225000, 'Sedan', 'Moderate Wear', 3200.00),
-    ('JN1BV7AP9EM658367', 'Mitsubishi', 'Lancer SE', 2011, 'Silver', 'Grey', 195000, 'Sedan', 'Light Wear', 6800.00),
-    ('WDDKJ7CB3AF093094', 'BMW', '328d xDrive', 2015, 'Glacier Silver', 'Black', 190000, 'Sedan', 'Light Wear', 12000.00),
-    ('1FDAF56P66EC10260', 'Mercedes-Benz', 'C400 4MATIC', 2015, 'Silver', 'White', 90000, 'Sedan', 'Excellent', 18500.00),
-    ('3VWSS29M51M026061', 'Dodge', 'Ram 3500', 2002, 'White', 'Black', 250000, 'Pickup', 'Moderate Wear', 5200.00),
-    ('3MZBM1L73EM140749', 'BMW', 'X5 M', 2013, 'Black', 'Black', 150000, 'SUV', 'Light Wear', 15000.00),
-    ('KNDJF723067190739', 'Chevrolet', 'Camaro RWD V6', 2012, 'Red', 'Black', 170000, 'Coupe', 'Light Wear', 11200.00),
-    ('JN1CV6AR8BM445759', 'Toyota', 'Camry 3.5', 2008, 'Tan', 'Brown', 140000, 'Sedan', 'Light Wear', 7500.00),
-    ('3LNHM28T47R679651', 'Audi', 'A5 S Line Quattro', 2014, 'Black', 'Black', 205000, 'Coupe', 'Light Wear', 13000.00),
-    ('WVWDB7AJ1EW026333', 'Honda', 'Accord', 2007, 'Silver', 'Black', 190000, 'Coupe', 'Light Wear', 5500.00),
-    ('JF2GPACC8F8202795', 'Audi', 'Q7', 2007, 'Silver', 'Black', 265000, 'SUV', 'Moderate Wear', 9000.00),
-    ('1GTR2VE7XDZ216668', 'Toyota', '4Runner', 1999, 'White', 'Black', 225000, 'SUV', 'Moderate Wear', 6500.00),
-    ('WAUAF78E58A025863', 'Cadillac', 'Escalade', 2010, 'White', 'Brown', 185000, 'SUV', 'Light Wear', 14000.00),
-    ('1GKLVNED8AJ284520', 'Infiniti', 'G37s', 2008, 'Grey', 'Black', 185000, 'Coupe', 'Light Wear', 10000.00);
+INSERT INTO customer (firstName, lastName, gender, dateOfBirth, phone, address, city, state, zip) VALUES
+    ('Lewis', 'Augustine', 'Male', '1991-07-09', '403-427-0934', '8107 Valley Drive', 'Lethbridge', 'Alberta', 'R4K 0N4'),
+    ('Leopoldo', 'Hodge', 'Male', '1997-12-02', '403-4245-3663', '524 Winding Way', 'Lethbridge', 'Alberta', 'L2A 4S7'),
+    ('Jennifer', 'Sanford', 'Female', '2003-10-31', '403-478-0662', '287 Myrtle Avenue', 'Coaldale', 'Alberta', 'R8A 2M0'),
+    ('Jody', 'Carlson', 'Female', '1989-09-13', '403-295-8760', '654 Washington Street', 'Lethbridge', 'Alberta', 'N5V 6K7'),
+    ('Mandy', 'Dunn', 'Male', '1995-11-11', '403-432-2665', '2 School Street', 'Taber', 'Alberta', 'S2V 9J5'),
+    ('Patty', 'Murillo', 'Female', '2005-02-23', '403-457-4555', '99 Glenwood Avenue', 'Brooks', 'Alberta', 'A2H 6G2'),
+    ('Rodger', 'Alvarez', 'Male', '1992-07-19', '403-449-1161', '7338 Forest Drive', 'Lethbridge', 'Alberta', 'E4B 1H2'),
+    ('Cleo', 'Love', 'Female', '2002-05-28', '403-244-9642', '7980 Sherman Street', 'Lethbridge', 'Alberta', 'M6C 5J8'),
+    ('Maxine', 'Nguyen', 'Female', '2000-02-20', '403-672-3641', '755 Madison Court', 'Magrath', 'Alberta', 'H0H 3M5'),
+    ('Jarrett', 'Glenn', 'Male', '2007-09-07', '403-245-1935', '6 James Street', 'Lethbridge', 'Alberta', 'N8H 1J8');
+
+INSERT INTO employee (firstName, lastName, phone) VALUES
+    ('Alphonso', 'Mccarthy', '403-800-9225'),
+    ('Cara', 'Park', '403-453-1515'),
+    ('Samual', 'Lyons', '403-201-6427'),
+    ('Kieth', 'Parrish', '403-226-7665'),
+    ('Son', 'Rowland', '403-451-9387'),
+    ('Walter', 'Costa', '403-761-3061');
 
 INSERT INTO sale (vin, customer_id, employee_id, sale_date, sale_price, down_payment, financed_amount, commission) VALUES
     ('KL1TD56E59B639081', 1, 1, '2025-12-17', 7999.99, 500.00, 7499.99, 400.00),
@@ -210,18 +230,6 @@ INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered,
     (8, '2026-03-02', '2029-03-02', 'Comprehensive', 'Engine, Transmission, Suspension, Electrical, A/C', 1399.00, 38.86, 250.00),
     (9, '2026-03-12', '2028-03-12', 'Basic', 'Engine, Transmission', 699.00, 29.13, 500.00),
     (10, '2026-03-20', '2029-03-20', 'Premium', 'Engine, Transmission, Suspension, Electrical, A/C', 999.00, 27.75, 250.00);
-
-INSERT INTO customer (firstName, lastName, gender, dateOfBirth, phone, address, city, state, zip) VALUES
-    ('Lewis', 'Augustine', 'Male', '1991-07-09', '403-427-0934', '8107 Valley Drive', 'Lethbridge', 'Alberta', 'R4K 0N4'),
-    ('Leopoldo', 'Hodge', 'Male', '1997-12-02', '403-4245-3663', '524 Winding Way', 'Lethbridge', 'Alberta', 'L2A 4S7'),
-    ('Jennifer', 'Sanford', 'Female', '2003-10-31', '403-478-0662', '287 Myrtle Avenue', 'Coaldale', 'Alberta', 'R8A 2M0'),
-    ('Jody', 'Carlson', 'Female', '1989-09-13', '403-295-8760', '654 Washington Street', 'Lethbridge', 'Alberta', 'N5V 6K7'),
-    ('Mandy', 'Dunn', 'Male', '1995-11-11', '403-432-2665', '2 School Street', 'Taber', 'Alberta', 'S2V 9J5'),
-    ('Patty', 'Murillo', 'Female', '2005-02-23', '403-457-4555', '99 Glenwood Avenue', 'Brooks', 'Alberta', 'A2H 6G2'),
-    ('Rodger', 'Alvarez', 'Male', '1992-07-19', '403-449-1161', '7338 Forest Drive', 'Lethbridge', 'Alberta', 'E4B 1H2'),
-    ('Cleo', 'Love', 'Female', '2002-05-28', '403-244-9642', '7980 Sherman Street', 'Lethbridge', 'Alberta', 'M6C 5J8'),
-    ('Maxine', 'Nguyen', 'Female', '2000-02-20', '403-672-3641', '755 Madison Court', 'Magrath', 'Alberta', 'H0H 3M5'),
-    ('Jarrett', 'Glenn', 'Male', '2007-09-07', '403-245-1935', '6 James Street', 'Lethbridge', 'Alberta', 'N8H 1J8');
 
 INSERT INTO employment_history (customer_id, employer, title, supervisor, supervisor_phone, address, start_date) VALUES
     (1, 'McDonalds', 'Burger Flipper', 'Joe Biden', '403-295-0954', '9735 Elm Street, Toronto, ON', '2008-09-12'),
@@ -252,14 +260,6 @@ INSERT INTO employment_history (customer_id, employer, title, supervisor, superv
     (9, 'Agriculture and Agri-Food Canada', 'Administrative Assistant', 'Thomas Clark', '403-758-2222', '456 Queens Avenue, Magrath, AB', '2021-08-01'),
     (9, 'Village Green Cooperative', 'Cashier Supervisor', 'Rebecca Harris', '403-758-3333', '789 Main Street, Magrath, AB', '2024-01-10'),
     (10, 'Lethbridge College', 'Library Assistant', 'Anna Perez', '403-320-3222', '3000 College Drive, Lethbridge, AB', '2025-09-01');
-
-INSERT INTO employee (firstName, lastName, phone) VALUES
-    ('Alphonso', 'Mccarthy', '403-800-9225'),
-    ('Cara', 'Park', '403-453-1515'),
-    ('Samual', 'Lyons', '403-201-6427'),
-    ('Kieth', 'Parrish', '403-226-7665'),
-    ('Son', 'Rowland', '403-451-9387'),
-    ('Walter', 'Costa', '403-761-3061');
 
 INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered, cost, deductible, monthly_cost) VALUES
     (1, '2025-12-17', '2027-12-17', 'Premium', 'Engine and Transmission', 1500.00, 250.00),
