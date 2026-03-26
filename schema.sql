@@ -261,24 +261,6 @@ INSERT INTO employment_history (customer_id, employer, title, supervisor, superv
     (9, 'Village Green Cooperative', 'Cashier Supervisor', 'Rebecca Harris', '403-758-3333', '789 Main Street, Magrath, AB', '2024-01-10'),
     (10, 'Lethbridge College', 'Library Assistant', 'Anna Perez', '403-320-3222', '3000 College Drive, Lethbridge, AB', '2025-09-01');
 
-INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered, cost, deductible, monthly_cost) VALUES
-    (1, '2025-12-17', '2027-12-17', 'Premium', 'Engine and Transmission', 1500.00, 250.00),
-    (1, '2025-12-17', '2026-12-17', 'Basic', 'Electrical System', 400.00, 100.00),
-    (1, '2025-12-17', '2028-12-17', 'Extended', 'Suspension and Brakes', 800.00, 150.00),
-    (2, '2025-12-28', '2026-12-28', 'Basic', 'Engine Components', 600.00, 100.00),
-    (3, '2026-01-02', '2027-01-02', 'Extended', 'Engine and Transmission', 1800.00, 300.00),
-    (3, '2026-01-02', '2027-01-02', 'Basic', 'Steering and Suspension', 500.00, 100.00),
-    (5, '2026-02-05', '2029-02-05', 'Luxury', 'All Components', 3500.00, 750.00),
-    (6, '2026-02-12', '2027-02-12', 'Basic', 'Engine Components', 800.00, 150.00),
-    (6, '2026-02-12', '2028-02-12', 'Premium', 'Transmission and Drivetrain', 1600.00, 300.00),
-    (6, '2026-02-12', '2027-02-12', 'Extended', 'Suspension System', 700.00, 125.00),
-    (7, '2026-02-22', '2028-02-22', 'Premium', 'Engine and Turbocharger', 2200.00, 400.00),
-    (7, '2026-02-22', '2027-02-22', 'Extended', 'Electrical and Electronics', 1100.00, 200.00),
-    (9, '2026-03-12', '2027-03-12', 'Extended', 'Engine Components', 1300.00, 250.00),
-    (9, '2026-03-12', '2028-03-12', 'Premium', 'Transmission Services', 1400.00, 280.00),
-    (10, '2026-03-20', '2028-03-20', 'Premium', 'Engine, Transmission, Suspension', 2100.00, 400.00),
-    (10, '2026-03-20', '2027-03-20', 'Extended', 'Electrical System', 900.00, 150.00);
-
 INSERT INTO payment (customer_id, sale_id, payment_date, due, paid_date, amount, bank_id) VALUES
     (1, 1, '2026-01-17', 1, '2026-01-15', 125.50, 924817465),
     (2, 2, '2026-01-28', 1, '2026-01-29', 50.00, 517394826),
