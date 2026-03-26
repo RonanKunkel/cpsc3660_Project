@@ -8,5 +8,6 @@
     </head>
     <body>
         <button onclick="window.location.href='purchaseCar.php'">Purchase Vehicle</button>
+        <button onclick="window.location.href='warranty.php'">Warranty</button>
     </body>
 </html>
