@@ -1,7 +1,5 @@
 <?php if (isset($_GET['success'])): ?>
     <p class="success">Vehicle purchased and saved successfully!</p>
-<?php elseif ($error): ?>
-    <p class="error"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
 <?php
 require 'db.php';
