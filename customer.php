@@ -14,7 +14,7 @@ class Employer
     $this->phone = trim($_post['phone'] ?? '');
     $this->address = trim($_post['address'] ?? '');
     $this->start_date = trim($_post['start_date'] ?? '');
-  }
+  } 
 
   public function _execute($stmt, int $customer_id)
   {
@@ -145,4 +145,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
 </body>
 </html>
-
