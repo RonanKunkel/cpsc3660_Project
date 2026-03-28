@@ -18,7 +18,7 @@ class Employer
     $this->phone = trim($_post['phone'] ?? '');
     $this->address = trim($_post['address'] ?? '');
     $this->start_date = trim($_post['start_date'] ?? '');
-  } 
+  }
 
   public function _execute(int $customer_id, $stmt)
   {
@@ -96,16 +96,13 @@ class Customer
   }
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $customer = new Customer($_POST);
   $customer->setEmploymentHistory($_POST['employers'] ?? []);
-
   try {
     $conn->beginTransaction();
     $customer->save($conn);
     $conn->commit();
-
     header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
     exit;
   } catch (PDOException $e) {
@@ -113,17 +110,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $error = "Database error: " . $e->getMessage();
   }
 }
-
 ?>
-
 
 <!DOCTYPE html>
 <html>
 <?php include('templates/header.php'); ?>
 <body>
-    <h1>Add Customer Details</h1>
-    <h2>Personal Info</h2>
+    <h1>Add Customer Details</h1> 
     <form method="POST"> 
+      <h2>Personal Info</h2>
         <label for="first_name">First Name:</label>
         <input type="text" id="first_name" name="first_name" maxlength="20" minlength="2" required><br><br>
         <label for="last_name">Last Name</label>
@@ -147,8 +142,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <input type="text" id="state" name="state" required><br><br>
         <label for="zip">Zip/Postal Code:</label>
         <input type="text" id="zip" name="zip" maxlength="6" minlength="6" required><br><br>
-
+        <h2>Employers</h2>
+        <div id="employment-container"></div>
+        <button type="button" id="add-employer-button">Add Employer</button><br><br>
         <button type="submit">Submit</button>
+        <script>
+          let employer_count = 0;
+          const container = document.getElementById('employment-container');
+          document.getElementById('add-employer-button').addEventListener('click', function () {
+            const index = employer_count++;
+            const div = document.createElement('div');
+            div.className = 'employer-entry';
+            div.innerHTML = `
+                <button type="button" class="remove-button" onclick="this.parentElement.remove()">&times;</button>
+                <label>Employer Name</label>
+                <input type="text" name="employers[${index}][name]" required><br><br>
+                <label>Employer Title</label>
+                <input type="text" name="employers[${index}][title]" required><br><br>
+                <label>Supervisor</label>
+                <input type="text" name="employers[${index}][super]" required><br><br>
+                <label>Supervisor Phone</label>
+                <input type="tel" name="employers[${index}][phone]" required><br><br>
+                <label>Address</label>
+                <input type="text" name="employers[${index}][address]" required><br><br>
+                <label>Start Date</label>
+                <input type="date" name="employers[${index}][name]" required><br><br>
+            `;
+            container.appendChild(div);
+        });
+        </script>
     </form>
 </body>
 </html>
