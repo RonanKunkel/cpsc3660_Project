@@ -123,6 +123,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include('templates/header.php'); ?>
 
 <body>
+    <?php if (isset($_GET['success'])): ?>
+        <p class="success">Vehicle purchased and saved successfully!</p>
+    <?php elseif ($error): ?>
+        <p class="error"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
     <h1>Enter Car Purchase Details</h1>
 
     <?php if ($success): ?>
@@ -225,10 +230,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </body>
-</html>
 
 <?php if (isset($_GET['success'])): ?>
     <p class="success">Vehicle purchased and saved successfully!</p>
 <?php elseif ($error): ?>
     <p class="error"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
+</html>
