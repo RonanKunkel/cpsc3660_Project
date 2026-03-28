@@ -1,5 +1,6 @@
 <?php
 require 'db.php';
+
 // sale
 $sale_date = $sale_price = $down_payment = $financed_amount = $commission  = '';
 // salesperson
@@ -17,20 +18,20 @@ if (isset($_GET['success'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // sale
-    $sale_date                  = trim($_POST['sale_date'] ?? '');
-    $sale_price                 = (float)($_POST['sale_price'] ?? 0);
-    $down_payment        = (float)($_POST['down_payment'] ?? 0);
-    $financed_amount     = (float)($_POST['financed_amount'] ?? 0);
-    $commission               = (float)($_POST['commission'] ?? 0);
+    $sale_date = trim($_POST['sale_date'] ?? '');
+    $sale_price = (float)($_POST['sale_price'] ?? 0);
+    $down_payment = (float)($_POST['down_payment'] ?? 0);
+    $financed_amount = (float)($_POST['financed_amount'] ?? 0);
+    $commission = (float)($_POST['commission'] ?? 0);
 
     // saleperson
-    $employee_id            = (int)($_POST['employee_id'] ?? 0);
+    $employee_id = (int)($_POST['employee_id'] ?? 0);
 
     // customer
-    $customer_id             = (int)($_POST['customer_id']?? 0);
+    $customer_id = (int)($_POST['customer_id']?? 0);
     
     // vehicle
-    $vin                            = trim($_POST['vin'] ?? '');
+    $vin = trim($_POST['vin'] ?? '');
 
 
     if ($sale_date === '' || $sale_price <= 0 || $down_payment < 0 || $financed_amount < 0 || $commission < 0) {
