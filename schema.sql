@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS customer (
   address VARCHAR (50),
   city VARCHAR (20),
   state VARCHAR (20),
-  zip VARCHAR (20) PRIMARY KEY (id)
+  zip VARCHAR (20),
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS employment_history (
@@ -31,7 +32,8 @@ CREATE TABLE IF NOT EXISTS employment_history (
 CREATE TABLE IF NOT EXISTS vehicle (
   vin CHAR (17),
   make VARCHAR (30) NOT NULL,
-  model VARCHAR (30) NOT NULL YEAR SMALLINT NOT NULL,
+  model VARCHAR (30) NOT NULL,
+  YEAR SMALLINT NOT NULL,
   color VARCHAR (20),
   interior_color VARCHAR (20),
   miles INT UNSIGNED,
@@ -50,7 +52,8 @@ CREATE TABLE IF NOT EXISTS vehicle (
     'Moderate Wear',
     'Abused'
   ),
-  book_price DECIMAL (10, 2) PRIMARY KEY (vin)
+  book_price DECIMAL (10, 2),
+  PRIMARY KEY (vin)
 );
 
 CREATE TABLE IF NOT EXISTS employee (
@@ -70,8 +73,11 @@ CREATE TABLE IF NOT EXISTS sale (
   sale_price DECIMAL (10, 2),
   down_payment DECIMAL (10, 2),
   financed_amount DECIMAL (10, 2),
-  commission DECIMAL (10, 2) PRIMARY KEY (id),
-  FOREIGN KEY (vin) REFERENCES vehicle (vin) FOREIGN KEY (customer_id) REFERENCES customer (id) FOREIGN KEY (employee_id) REFERENCES employee (id)
+  commission DECIMAL (10, 2),
+  PRIMARY KEY (id),
+  FOREIGN KEY (vin) REFERENCES vehicle (vin),
+  FOREIGN KEY (customer_id) REFERENCES customer (id),
+  FOREIGN KEY (employee_id) REFERENCES employee (id)
 );
 
 CREATE TABLE IF NOT EXISTS warranty (
@@ -83,7 +89,8 @@ CREATE TABLE IF NOT EXISTS warranty (
   items_covered VARCHAR (50),
   cost DECIMAL (10, 2),
   monthly_cost DECIMAL (10, 2),
-  deductible DECIMAL (10, 2) PRIMARY KEY (id),
+  deductible DECIMAL (10, 2),
+  PRIMARY KEY (id),
   FOREIGN KEY (sale_id) REFERENCES sale (id)
 );
 
@@ -94,7 +101,8 @@ CREATE TABLE IF NOT EXISTS purchase (
   LOCATION VARCHAR(50),
   auction VARCHAR (30),
   seller VARCHAR (30),
-  price_paid DECIMAL (10, 2) PRIMARY KEY (id),
+  price_paid DECIMAL (10, 2),
+  PRIMARY KEY (id),
   FOREIGN KEY (vin) REFERENCES vehicle (vin)
 );
 
@@ -108,7 +116,8 @@ CREATE TABLE IF NOT EXISTS payment (
   amount DECIMAL (10, 2),
   bank_id INT,
   PRIMARY KEY (id),
-  FOREIGN KEY (customer_id) REFERENCES customer (id) FOREIGN KEY (sale_id) REFERENCES sale (id)
+  FOREIGN KEY (customer_id) REFERENCES customer (id),
+  FOREIGN KEY (sale_id) REFERENCES sale (id)
 );
 
 CREATE TABLE IF NOT EXISTS repair (
@@ -116,6 +125,7 @@ CREATE TABLE IF NOT EXISTS repair (
   purchase_id INT,
   description VARCHAR (100),
   estimated_cost DECIMAL (10, 2),
-  actual_cost DECIMAL (10, 2) PRIMARY KEY (id),
+  actual_cost DECIMAL (10, 2),
+  PRIMARY KEY (id),
   FOREIGN KEY (purchase_id) REFERENCES purchase (id)
 );
