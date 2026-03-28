@@ -1,22 +1,16 @@
+<?php if (isset($_GET['success'])): ?>
+        <p class="success">Vehicle purchased and saved successfully!</p>
+<?php endif; ?>
 <?php
 require 'db.php';
 
-
-
-/*
- * Payment
- */
-class Payment
-{
-  private $date = '';
-  private $due_date = '';
-  private $paid_date = '';
-  private $amount = 0;
-  private $bank_account = '';
-}
+$vin = $make = $model = $year = $color = $interior_color = $miles = $style = $condition = $book_price = '';
+$price_paid = $date = $location = $seller = $auction = '';
+$problems = [];
+$success = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  // customer
+  // Vehicle
   $vin = trim($_POST['vin'] ?? '');
   $make = trim($_POST['make'] ?? '');
   $model = trim($_POST['model'] ?? '');
@@ -28,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $condition = trim($_POST['condition'] ?? '');
   $book_price = (float) ($_POST['book_price'] ?? 0);
 
-  // payment
+  // Purchase
   $price_paid = (float) ($_POST['price_paid'] ?? 0);
   $date = trim($_POST['date'] ?? '');
   $location = trim($_POST['location'] ?? '');
@@ -122,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   }
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -233,3 +226,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </body>
 </html>
+
+<?php if (isset($_GET['success'])): ?>
+    <p class="success">Vehicle purchased and saved successfully!</p>
+<?php elseif ($error): ?>
+    <p class="error"><?= htmlspecialchars($error) ?></p>
+<?php endif; ?>

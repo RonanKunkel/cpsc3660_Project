@@ -73,9 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Sell A Car</title>
-</head>
+
+    <?php include('templates/header.php'); ?>
+
 <body>
     <h1>Enter Car Selling Details</h1>
 
