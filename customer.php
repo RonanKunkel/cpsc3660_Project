@@ -116,13 +116,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
 <?php include('templates/header.php'); ?>
 <body>
-    <h1>Add Customer Details</h1> 
+    <h2>Add Customer Details</h2>
     <form method="POST"> 
-      <h2>Personal Info</h2>
+      <h3>Personal Info</h3>
         <label for="first_name">First Name:</label>
         <input type="text" id="first_name" name="first_name" maxlength="20" minlength="2" required><br><br>
+
         <label for="last_name">Last Name</label>
         <input type="text" id="last_name" name="last_name" maxlength="20" minlength="2" required><br><br>
+
         <label for="gender">Gender:</label>
         <select id="gender" name="gender" required>
             <option value="">Gender</option>
@@ -130,19 +132,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <option value="Female">Female</option>
             <option value="Other">Other</option>
         </select><br><br>
+
         <label for="date_of_birth">Date of Birth</label>
         <input type="date" id="date_of_birth" name="date_of_birth" required><br><br>
+
         <label for="phone">Phone:</label>
         <input type="tel" id="phone" name="phone" required><br><br>
+
         <label for="address">Address:</label>
         <input type="text" id="address" name="address" maxlength="50" required><br><br>
+
         <label for="city">City:</label>
         <input type="text" id="city" name="city" required><br><br>
+
         <label for="state">State:</label>
         <input type="text" id="state" name="state" required><br><br>
+
         <label for="zip">Zip/Postal Code:</label>
         <input type="text" id="zip" name="zip" maxlength="6" minlength="6" required><br><br>
-        <h2>Employers</h2>
+
+        <h3>Employers</h3>
         <div id="employment-container"></div>
         <button type="button" id="add-employer-button">Add Employer</button><br><br>
         <button type="submit">Submit</button>
@@ -157,16 +166,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button type="button" class="remove-button" onclick="this.parentElement.remove()">&times;</button>
                 <label>Employer Name</label>
                 <input type="text" name="employers[${index}][name]" required><br><br>
+
                 <label>Employer Title</label>
                 <input type="text" name="employers[${index}][title]" required><br><br>
+
                 <label>Supervisor</label>
                 <input type="text" name="employers[${index}][super]" required><br><br>
+
                 <label>Supervisor Phone</label>
                 <input type="tel" name="employers[${index}][phone]" required><br><br>
+
                 <label>Address</label>
                 <input type="text" name="employers[${index}][address]" required><br><br>
+
                 <label>Start Date</label>
-                <input type="date" name="employers[${index}][name]" required><br><br>
+                <input type="date" name="employers[${index}][start_date]" required><br><br>
             `;
             container.appendChild(div);
         });
