@@ -64,10 +64,10 @@ class Customer
       VALUES (:lastName, :firstName, :gender, :dateOfBirth, :phone, :address, :city, :state, :zip)
     ");
     $stmt->execute([
-      ':lastName' => $this->last_name,
-      ':firstName' => $this->first_name,
+      ':last_name' => $this->last_name,
+      ':first_name' => $this->first_name,
       ':gender' => $this->gender,
-      ':dateOfBirth' => $this->date_of_birth,
+      ':date_of_birth' => $this->date_of_birth,
       ':phone' => $this->phone,
       ':address' => $this->address,
       ':city' => $this->city,
@@ -113,13 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Create Customer</title>
-</head>
+<?php include('templates/header.php'); ?>
 <body>
     <h1>Add Customer Details</h1>
-    <form method="POST">
-        <h2>Personal Info</h2>
+    <h2>Personal Info</h2>
+    <form method="POST"> 
+      
         <label for="first_name">First Name:</label>
         <input type="text" id="first_name" name="first_name" maxlength="20" minlength="2" required><br>
         <label for="last_name">Last Name</label>
