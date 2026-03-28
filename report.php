@@ -36,9 +36,10 @@ $saleCount = $stmt->fetchColumn();
 
 // Display cars that got sold
 $stmt = $conn->prepare("
-    SELECT v.year, v.make, v.model, s.sale_price
+    SELECT v.year, v.make, v.model, p.price_paid, s.sale_price, s.sale_price - p.price_paid AS profit
     FROM vehicle AS v
-    NATURAL JOIN sale As s
+    NATURAL JOIN sale AS s
+    NATURAL JOIN purchase AS p
     WHERE YEAR(s.sale_date) = YEAR(CURDATE() - INTERVAL 1 MONTH) 
     AND MONTH(s.sale_date) = MONTH(CURDATE() - INTERVAL 1 MONTH)
 ");
@@ -96,8 +97,8 @@ $latePayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <h1>Report for <?php echo date('F Y', strtotime('-1 month')); ?></h1>
-        <p>Number of Cars Purchased: <?php echo $purchaseCount; ?></p>
         <h2>Purchased Cars:</h2>
+        <p>Number of Cars Purchased: <?php echo $purchaseCount; ?></p>
         <table border="1">
             <tr>
                 <th>Year</th>
@@ -113,30 +114,34 @@ $latePayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo htmlspecialchars($row['price_paid']); ?></td>
             </tr>
             <?php endforeach; ?>
-        </table>
+        </table><br><br>
 
-        <p>Number of Cars Sold: <?php echo $saleCount; ?></p>
         <h2>Sold Cars:</h2>
+        <p>Number of Cars Sold: <?php echo $saleCount; ?></p>
         <table border="1">
             <tr>
                 <th>Year</th>
                 <th>Make</th>
                 <th>Model</th>
+                <th>Price Paid</th>
                 <th>Sale Price</th>
+                <th>Profit</th>
             </tr>
             <?php foreach($sold as $row): ?>
             <tr>
                 <td><?php echo htmlspecialchars($row['year']); ?></td>
                 <td><?php echo htmlspecialchars($row['make']); ?></td>
                 <td><?php echo htmlspecialchars($row['model']); ?></td>
+                <td><?php echo htmlspecialchars($row['price_paid']); ?></td>
                 <td><?php echo htmlspecialchars($row['sale_price']); ?></td>
+                <td><?php echo htmlspecialchars($row['profit']); ?></td>
             </tr>
             <?php endforeach; ?>
-        </table>
+        </table><br><br>
+        <h2>Payments:</h2>
         <p>Number of Payments Made: <?php echo $paymentCount; ?></p>
         <p>Total Amount Payed: <?php echo $paymentSum; ?></p>
         <p>Number of Late Payments: <?php echo $latePayments; ?></p>
-        <h2>Late Payers for Month:</h2>
         <table border="1">
             <tr>
                 <th>First Name</th>

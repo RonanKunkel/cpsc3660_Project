@@ -8,5 +8,6 @@
     </head>
     <body>
         <button onclick="window.location.href='report.php'">View Report for Last Month</button>
+        <button onclick="window.location.href='inventory.php'">View Inventory</button>
     </body>
 </html>

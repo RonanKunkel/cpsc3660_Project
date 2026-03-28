@@ -1,8 +1,3 @@
-<?php if (isset($_GET['success'])): ?>
-    <p class="success">Vehicle purchased and saved successfully!</p>
-<?php elseif ($error): ?>
-    <p class="error"><?= htmlspecialchars($error) ?></p>
-<?php endif; ?>
 <?php
 require 'db.php';
 
@@ -126,6 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Purchase Car</title>
 </head>
 <body>
+    <?php if (isset($_GET['success'])): ?>
+        <p class="success">Vehicle purchased and saved successfully!</p>
+    <?php elseif ($error): ?>
+        <p class="error"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
     <h1>Enter Car Purchase Details</h1>
 
     <?php if ($success): ?>
