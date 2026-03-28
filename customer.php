@@ -1,12 +1,16 @@
-<!-- Beginning of PHP script -->
 <?php
 require 'db.php';
 
 class Employer
 {
-  public readonly string $name, $title, $super, $phone, $address, $start_date;
+  public readonly string $name;
+  public readonly string $title;
+  public readonly string $super;
+  public readonly string $phone;
+  public readonly string $address;
+  public readonly string $start_date;
 
-  public function __construct($_post)
+  public function __construct(array $_post)
   {
     $this->name = trim($_post['name'] ?? '');
     $this->title = trim($_post['title'] ?? '');
@@ -16,7 +20,7 @@ class Employer
     $this->start_date = trim($_post['start_date'] ?? '');
   } 
 
-  public function _execute($stmt, int $customer_id)
+  public function _execute(int $customer_id, $stmt)
   {
     $stmt->execute([
       ':customer_id' => $customer_id,
@@ -32,10 +36,18 @@ class Employer
 
 class Customer
 {
-  private string $first_name, $last_name, $phone, $address, $city, $state, $zip, $gender, $date_of_birth;
-  private array $employment_history;
+  private string $first_name;
+  private string $last_name;
+  private string $phone; 
+  private string $address; 
+  private string $city;
+  private string $state; 
+  private string $zip;
+  private string $gender; 
+  private string $date_of_birth;
+  private array $employment_history = [];
 
-  public function __construct(&$_post)
+  public function __construct(array $_post)
   {
     $this->first_name = trim($_post['first_name'] ?? '');
     $this->last_name = trim($_post['last_name'] ?? '');
@@ -48,20 +60,18 @@ class Customer
     $this->date_of_birth = trim($_post['date_of_birth'] ?? '');
   }
 
-  public function setEmploymentHistory($employers)
+  public function setEmploymentHistory(array $employers)
   {
-    if (!empty($employers)) {
-      foreach ($employers as $employer) {
-        $this->employment_history[] = new Employer($employer);
-      }
+    foreach ($employers as $employer) {
+      $this->employment_history[] = new Employer($employer);
     }
   }
 
   public function save($conn)
   {
-    $stmt = $conn("
-      INSERT INTO customer (lastName, firstName, gender, date_of_birth, phone, address, city, state, zip)
-      VALUES (:lastName, :firstName, :gender, :dateOfBirth, :phone, :address, :city, :state, :zip)
+    $stmt = $conn->prepare("
+      INSERT INTO customer (last_name, first_name, gender, date_of_birth, phone, address, city, state, zip)
+      VALUES (:last_name, :first_name, :gender, :date_of_birth, :phone, :address, :city, :state, :zip)
     ");
     $stmt->execute([
       ':last_name' => $this->last_name,
@@ -74,17 +84,13 @@ class Customer
       ':state' => $this->state,
       ':zip' => $this->zip,
     ]);
-
-    // get last id inserted
-    $customer_id = $conn->lastInsertId();
-
-    // add each vehicle problem into repair table
+    $customer_id = (int)$conn->lastInsertId();
     if (!empty($this->employment_history)) {
       $stmt = $conn->prepare("
-      INSERT INTO repair (customer_id, employer, title, supervisor, supervisor_phone, address, start_date)
+      INSERT INTO employment_history (customer_id, employer, title, supervisor, supervisor_phone, address, start_date)
       VALUES (:customer_id, :employer, :title, :supervisor, :supervisor_phone, :address, :start_date)");
       foreach ($this->employment_history as $employer) {
-        $employer->_execute($stmt, $customer_id);
+        $employer->_execute($customer_id, $stmt);
       }
     }
   }
@@ -94,11 +100,12 @@ class Customer
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $customer = new Customer($_POST);
   $customer->setEmploymentHistory($_POST['employers'] ?? []);
+
   try {
     $conn->beginTransaction();
     $customer->save($conn);
     $conn->commit();
-    $success = true;
+
     header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
     exit;
   } catch (PDOException $e) {
@@ -108,7 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 ?>
-<!-- End of PHP Script -->
 
 
 <!DOCTYPE html>
@@ -118,28 +124,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>Add Customer Details</h1>
     <h2>Personal Info</h2>
     <form method="POST"> 
-      
         <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" maxlength="20" minlength="2" required><br>
+        <input type="text" id="first_name" name="first_name" maxlength="20" minlength="2" required><br><br>
         <label for="last_name">Last Name</label>
-        <input type="text" id="last_name" name="last_name" maxlength="20" minlength=2 required><br>
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required><br>
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" maxlength="50" required><br> 
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" required><br>
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" required><br>
-        <label for="zip">Zip/Postal Code:</label>
-        <input type="text" id="zip" name="zip" maxlength="6" minlength="6" required><br>
+        <input type="text" id="last_name" name="last_name" maxlength="20" minlength="2" required><br><br>
         <label for="gender">Gender:</label>
         <select id="gender" name="gender" required>
             <option value="">Gender</option>
             <option value="Male">Man</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
-        </select><br>
+        </select><br><br>
+        <label for="date_of_birth">Date of Birth</label>
+        <input type="date" id="date_of_birth" name="date_of_birth" required><br><br>
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required><br><br>
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" maxlength="50" required><br><br>
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required><br><br>
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required><br><br>
+        <label for="zip">Zip/Postal Code:</label>
+        <input type="text" id="zip" name="zip" maxlength="6" minlength="6" required><br><br>
+
         <button type="submit">Submit</button>
     </form>
 </body>
