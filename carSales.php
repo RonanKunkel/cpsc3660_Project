@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ':sale_price' => $sale_price,
                 ':down_payment' => $down_payment,
                 ':financed_amount' => $financed_amount,
-                ':commission' => $commission,
+                ':commission'            => $commission,
             ]);
 
             $conn->commit();
