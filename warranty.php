@@ -1,109 +1,74 @@
 <?php
 require 'db.php';
 
-$sale_id = $start_date = $end_date = $policy_name = $items_covered = $cost = $deductible = '';
-$employee_id = '';
-$customer_id = $sale_price = $monthly_cost = '';
-
+$sale_id = $employee_id = $customer_id = '';
 $warranties = [];
 $success = false;
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // employee (salesperson)
-    $employee_id    = trim($_POST['employee_id'] ?? '');
+    $employee_id = trim($_POST['employee_id'] ?? '');
+    $customer_id = trim($_POST['customer_id'] ?? '');
 
-    // vehicle info
-    $customer_id    = trim($_POST['customer_id'] ?? 0);
-    $monthly_cost   = (int)($_POST['monthly_cost'] ?? 0);
-    $sale_price     = (int)($_POST['sale_price'] ?? 0);
-
-    // warranties
+    // Warranties
     if (!empty($_POST['warranties'])) {
         foreach ($_POST['warranties'] as $w) {
             $warranties[] = [
-                $sale_id        = trim($w['sale_id'] ?? '');
-                $start_date     = trim($w['start_date'] ?? '');
-                $end_date       = trim($w['end_date'] ?? '');
-                $policy_name    = trim($w['policy_name'] ?? 0);
-                $items_covered  = trim($w['items_covered'] ?? '');
-                $cost           = (int)($w['cost'] ?? '');
-                $deductible     = (int)($w['deductable'] ?? 0);
+                'start_date'    => trim($w['start_date'] ?? ''),
+                'end_date'      => trim($w['end_date'] ?? ''),
+                'policy_name'   => trim($w['policy_name'] ?? ''),
+                'items_covered' => trim($w['items_covered'] ?? ''),
+                'cost'          => (float)($w['cost'] ?? 0),
+                'monthly_cost'  => (float)($w['monthly_cost'] ?? 0),
+                'deductible'    => (float)($w['deductible'] ?? 0)
             ];
         }
     }
 
-    // Make sure fields are entered correctly
-    if (empty($employee_id)) {
-        $error = "Salesperson ID required.";
-    }
-    elseif (empty($customer_id)) {
-        $error = "Customer ID required.";
-    }
-    elseif (empty($warranties)) {
-        $error = "At least one warranty must be added.";
-    }
-    } else {
+    // Validation
+    if (empty($employee_id)) $error = "Salesperson ID required.";
+    elseif (empty($customer_id)) $error = "Customer ID required.";
+    elseif (empty($warranties)) $error = "At least one warranty must be added.";
+    else {
         try {
             $conn->beginTransaction();
 
-            // Add new vehicle
+            // Create a sale record (assuming one vehicle per form)
             $stmt = $conn->prepare("
-                INSERT INTO vehicle (vin, make, model, year, color, interior_color, miles, style, vehicle_condition, book_price)
-                VALUES (:vin, :make, :model, :year, :color, :interior_color, :miles, :style, :vehicle_condition, :book_price)
+                INSERT INTO sale (vin, customer_id, employee_id, sale_date, sale_price)
+                VALUES (:vin, :customer_id, :employee_id, :sale_date, :sale_price)
             ");
             $stmt->execute([
-                ':vin'               => $vin,
-                ':make'              => $make,
-                ':model'             => $model,
-                ':year'              => $year,
-                ':color'             => $color,
-                ':interior_color'    => $interior_color,
-                ':miles'             => $miles,
-                ':style'             => $style,
-                ':vehicle_condition' => $condition,
-                ':book_price'        => $book_price,
+                ':vin'          => $_POST['vin'] ?? '',
+                ':customer_id'  => $customer_id,
+                ':employee_id'  => $employee_id,
+                ':sale_date'    => $_POST['sale_date'] ?? date('Y-m-d'),
+                ':sale_price'   => (float)($_POST['sale_price'] ?? 0)
             ]);
 
-            // Add new purchase
+            $sale_id = $conn->lastInsertId();
+
+            // Insert warranties
             $stmt = $conn->prepare("
-                INSERT INTO purchase (vin, purchase_date, location, auction, seller, price_paid)
-                VALUES (:vin, :purchase_date, :location, :auction, :seller, :price_paid)
+                INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered, cost, monthly_cost, deductible)
+                VALUES (:sale_id, :start_date, :end_date, :policy_name, :items_covered, :cost, :monthly_cost, :deductible)
             ");
-            $stmt->execute([
-                ':vin'           => $vin,
-                ':purchase_date' => $date,
-                ':location'      => $location,
-                ':auction'       => $auction,
-                ':seller'        => $seller,
-                ':price_paid'    => $price_paid,
-            ]);
 
-            // get last id inserted
-            $purchase_id = $conn->lastInsertId();
-
-            // add each vehicle problem into repair table
-            if (!empty($problems)) {
-                $stmt = $conn->prepare("
-                    INSERT INTO repair (purchase_id, description, estimated_cost, actual_cost)
-                    VALUES (:purchase_id, :description, :estimated_cost, :actual_cost)
-                ");
-                foreach ($problems as $problem) {
-                    $stmt->execute([
-                        ':purchase_id'    => $purchase_id,
-                        ':description'    => $problem['description'],
-                        ':estimated_cost' => $problem['estimated_cost'],
-                        ':actual_cost'    => $problem['actual_cost'],
-                    ]);
-                }
+            foreach ($warranties as $w) {
+                $stmt->execute([
+                    ':sale_id'       => $sale_id,
+                    ':start_date'    => $w['start_date'],
+                    ':end_date'      => $w['end_date'],
+                    ':policy_name'   => $w['policy_name'],
+                    ':items_covered' => $w['items_covered'],
+                    ':cost'          => $w['cost'],
+                    ':monthly_cost'  => $w['monthly_cost'],
+                    ':deductible'    => $w['deductible']
+                ]);
             }
 
             $conn->commit();
             $success = true;
-
-            header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
-            exit;
-
         } catch (PDOException $e) {
             $conn->rollBack();
             $error = "Database error: " . $e->getMessage();
@@ -111,118 +76,74 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Purchase Car</title>
+    <title>Enter Warranties</title>
 </head>
 <body>
-    <h1>Enter Car Purchase Details</h1>
+<h1>Enter Warranties for Vehicle Sale</h1>
 
-    <?php if ($success): ?>
-        <p class="success">Vehicle purchased and saved successfully!</p>
-    <?php elseif ($error): ?>
-        <p class="error"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
+<?php if ($success): ?>
+    <p style="color:green;">Warranties saved successfully!</p>
+<?php elseif ($error): ?>
+    <p style="color:red;"><?= htmlspecialchars($error) ?></p>
+<?php endif; ?>
 
-    <form method="POST">
-        <h2>Vehicle Info</h2>
+<form method="POST">
+    <h2>Vehicle Info</h2>
+    <label for="vin">VIN:</label>
+    <input type="text" id="vin" name="vin" maxlength="17" required><br><br>
 
-        <label for="vin">VIN:</label>
-        <input type="text" id="vin" name="vin" maxlength="17" minlength="17" required><br><br>
+    <label for="sale_date">Sale Date:</label>
+    <input type="date" id="sale_date" name="sale_date" required><br><br>
 
-        <label for="make">Make:</label>
-        <input type="text" id="make" name="make" maxlength="30" required><br><br>
+    <label for="sale_price">Sale Price:</label>
+    <input type="number" step="0.01" id="sale_price" name="sale_price" required><br><br>
 
-        <label for="model">Model:</label>
-        <input type="text" id="model" name="model" maxlength="30" required><br><br>
+    <h2>Employee (Salesperson)</h2>
+    <label for="employee_id">Employee ID:</label>
+    <input type="number" id="employee_id" name="employee_id" required><br><br>
 
-        <label for="year">Year:</label>
-        <input type="number" id="year" name="year" min="1900" max="2100" required><br><br>
+    <h2>Customer</h2>
+    <label for="customer_id">Customer ID:</label>
+    <input type="number" id="customer_id" name="customer_id" required><br><br>
 
-        <label for="color">Color:</label>
-        <input type="text" id="color" name="color" maxlength="20" required><br><br>
+    <h2>Warranties</h2>
+    <div id="warranties-container"></div>
+    <button type="button" id="add-warranty-btn">Add Warranty</button><br><br>
 
-        <label for="interior_color">Interior Color:</label>
-        <input type="text" id="interior_color" name="interior_color" maxlength="20"><br><br>
+    <button type="submit">Submit</button>
+</form>
 
-        <label for="miles">Miles:</label>
-        <input type="number" id="miles" name="miles" min="0" required><br><br>
+<script>
+let warrantyCount = 0;
+const container = document.getElementById('warranties-container');
 
-        <label for="style">Style:</label>
-        <select id="style" name="style" required>
-            <option value="">Select Style</option>
-            <option value="Coupe">Coupe</option>
-            <option value="Sedan">Sedan</option>
-            <option value="Hatchback">Hatchback</option>
-            <option value="Pickup">Pickup</option>
-            <option value="Van">Van</option>
-            <option value="SUV">SUV</option>
-            <option value="Wagon">Wagon</option>
-        </select><br><br>
-
-        <label for="condition">Condition:</label>
-        <select id="condition" name="condition" required>
-            <option value="">Select Condition</option>
-            <option value="Excellent">Excellent</option>
-            <option value="Light Wear">Light Wear</option>
-            <option value="Moderate Wear">Moderate Wear</option>
-            <option value="Abused">Abused</option>
-        </select><br><br>
-
-        <label for="book_price">Book Price:</label>
-        <input type="number" id="book_price" name="book_price" step="0.01" min="0" required><br><br>
-
-        <h2>Purchase Info</h2>
-
-        <label for="price_paid">Price Paid:</label>
-        <input type="number" id="price_paid" name="price_paid" step="0.01" min="0" required><br><br>
-
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required><br><br>
-
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" maxlength="50" required><br><br>
-
-        <label for="seller">Seller/Dealer:</label>
-        <input type="text" id="seller" name="seller" maxlength="30" required><br><br>
-
-        <label for="auction">Auction:</label>
-        <input type="text" id="auction" name="auction" maxlength="30" placeholder="Auction name or leave blank"><br><br>
-
-        <h2>Problems</h2>
-        <div id="problems-container"></div>
-        <button type="button" id="add-problem-btn">Add Problem</button>
-        <br><br>
-
-        <button type="submit">Submit</button>
-    </form>
-
-    <script>
-        let problemCount = 0;
-        const container = document.getElementById('problems-container');
-
-        document.getElementById('add-problem-btn').addEventListener('click', function () {
-            const index = problemCount++;
-            const div = document.createElement('div');
-            div.className = 'problem-entry';
-            div.innerHTML = `
-                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
-                <label>Problem Description:</label>
-                <input type="text" name="problems[${index}][description]" maxlength="100" required><br><br>
-                <label>Est. Repair Cost:</label>
-                <input type="number" name="problems[${index}][estimated_cost]" step="0.01" min="0" required><br><br>
-                <label>Actual Repair Cost:</label>
-                <input type="number" name="problems[${index}][actual_cost]" step="0.01" min="0" required><br><br>
-            `;
-            container.appendChild(div);
-        });
-    </script>
+document.getElementById('add-warranty-btn').addEventListener('click', () => {
+    const index = warrantyCount++;
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <hr>
+        <button type="button" onclick="this.parentElement.remove()">Remove</button><br>
+        <label>Start Date:</label>
+        <input type="date" name="warranties[${index}][start_date]" required><br>
+        <label>End Date:</label>
+        <input type="date" name="warranties[${index}][end_date]" required><br>
+        <label>Policy Name:</label>
+        <input type="text" name="warranties[${index}][policy_name]" required><br>
+        <label>Items Covered:</label>
+        <input type="text" name="warranties[${index}][items_covered]" required><br>
+        <label>Cost:</label>
+        <input type="number" step="0.01" name="warranties[${index}][cost]" required><br>
+        <label>Monthly Cost:</label>
+        <input type="number" step="0.01" name="warranties[${index}][monthly_cost]" required><br>
+        <label>Deductible:</label>
+        <input type="number" step="0.01" name="warranties[${index}][deductible]" required><br>
+    `;
+    container.appendChild(div);
+});
+</script>
 </body>
 </html>
-
-<?php if (isset($_GET['success'])): ?>
-    <p class="success">Vehicle purchased and saved successfully!</p>
-<?php elseif ($error): ?>
-    <p class="error"><?= htmlspecialchars($error) ?></p>
-<?php endif; ?>
