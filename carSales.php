@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 VALUES (:customer_id, :vin, :employee_id, :sale_date, :sale_price, :down_payment, :financed_amount, :commission) 
             ");
             $stmt->execute([
-                ':customer_id'           => $customer_id,
-                ':vin'                          => $vin,
-                ':employee_id'          => $employee_id,
-                ':sale_date'                => $sale_date,
-                ':sale_price'               => $sale_price,
-                ':down_payment'      => $down_payment,
-                ':financed_amount'   => $financed_amount,
-                ':commission'            => $commission,
+                ':customer_id' => $customer_id,
+                ':vin' => $vin,
+                ':employee_id' => $employee_id,
+                ':sale_date' => $sale_date,
+                ':sale_price' => $sale_price,
+                ':down_payment' => $down_payment,
+                ':financed_amount' => $financed_amount,
+                ':commission' => $commission,
             ]);
 
             $conn->commit();
@@ -74,9 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <!DOCTYPE html>
 <html>
-
     <?php include('templates/header.php'); ?>
-
 <body>
     <h1>Enter Car Selling Details</h1>
 
