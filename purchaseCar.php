@@ -1,3 +1,6 @@
+<?php if (isset($_GET['success'])): ?>
+        <p class="success">Vehicle purchased and saved successfully!</p>
+<?php endif; ?>
 <?php
 require 'db.php';
 
@@ -5,121 +8,120 @@ $vin = $make = $model = $year = $color = $interior_color = $miles = $style = $co
 $price_paid = $date = $location = $seller = $auction = '';
 $problems = [];
 $success = false;
-$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Vehicle
-    $vin            = trim($_POST['vin'] ?? '');
-    $make           = trim($_POST['make'] ?? '');
-    $model          = trim($_POST['model'] ?? '');
-    $year           = (int)($_POST['year'] ?? 0);
-    $color          = trim($_POST['color'] ?? '');
-    $interior_color = trim($_POST['interior_color'] ?? '');
-    $miles          = (int)($_POST['miles'] ?? 0);
-    $style          = trim($_POST['style'] ?? '');
-    $condition      = trim($_POST['condition'] ?? '');
-    $book_price     = (float)($_POST['book_price'] ?? 0);
+  // Vehicle
+  $vin = trim($_POST['vin'] ?? '');
+  $make = trim($_POST['make'] ?? '');
+  $model = trim($_POST['model'] ?? '');
+  $year = (int) ($_POST['year'] ?? 0);
+  $color = trim($_POST['color'] ?? '');
+  $interior_color = trim($_POST['interior_color'] ?? '');
+  $miles = (int) ($_POST['miles'] ?? 0);
+  $style = trim($_POST['style'] ?? '');
+  $condition = trim($_POST['condition'] ?? '');
+  $book_price = (float) ($_POST['book_price'] ?? 0);
 
-    // Purchase
-    $price_paid = (float)($_POST['price_paid'] ?? 0);
-    $date       = trim($_POST['date'] ?? '');
-    $location   = trim($_POST['location'] ?? '');
-    $seller     = trim($_POST['seller'] ?? '');
-    $auction    = trim($_POST['auction'] ?? '');
+  // Purchase
+  $price_paid = (float) ($_POST['price_paid'] ?? 0);
+  $date = trim($_POST['date'] ?? '');
+  $location = trim($_POST['location'] ?? '');
+  $seller = trim($_POST['seller'] ?? '');
+  $auction = trim($_POST['auction'] ?? '');
 
-    // Problem
-    if (!empty($_POST['problems'])) {
-        foreach ($_POST['problems'] as $p) {
-            $problems[] = [
-                'description'    => trim($p['description'] ?? ''),
-                'estimated_cost' => (float)($p['estimated_cost'] ?? 0),
-                'actual_cost'    => (float)($p['actual_cost'] ?? 0),
-            ];
-        }
+  // Problem
+  if (!empty($_POST['problems'])) {
+    foreach ($_POST['problems'] as $p) {
+      $problems[] = [
+        'description' => trim($p['description'] ?? ''),
+        'estimated_cost' => (float) ($p['estimated_cost'] ?? 0),
+        'actual_cost' => (float) ($p['actual_cost'] ?? 0),
+      ];
     }
+  }
 
-    // Make sure fields are entered correctly
-    if (empty($vin) || strlen($vin) !== 17) {
-        $error = "VIN must be exactly 17 characters.";
-    } elseif (empty($make) || empty($model) || empty($year)) {
-        $error = "Make, Model, and Year are required.";
-    } elseif (empty($condition) || empty($style)) {
-        $error = "Condition and Style are required.";
-    } elseif (empty($date)) {
-        $error = "Purchase date is required.";
-    } else {
-        try {
-            $conn->beginTransaction();
+  // Make sure fields are entered correctly
+  if (empty($vin) || strlen($vin) !== 17) {
+    $error = "VIN must be exactly 17 characters.";
+  } elseif (empty($make) || empty($model) || empty($year)) {
+    $error = "Make, Model, and Year are required.";
+  } elseif (empty($condition) || empty($style)) {
+    $error = "Condition and Style are required.";
+  } elseif (empty($date)) {
+    $error = "Purchase date is required.";
+  } else {
+    try {
+      $conn->beginTransaction();
 
-            // Add new vehicle
-            $stmt = $conn->prepare("
+      // Add new vehicle
+      $stmt = $conn->prepare("
                 INSERT INTO vehicle (vin, make, model, year, color, interior_color, miles, style, vehicle_condition, book_price)
                 VALUES (:vin, :make, :model, :year, :color, :interior_color, :miles, :style, :vehicle_condition, :book_price)
             ");
-            $stmt->execute([
-                ':vin'               => $vin,
-                ':make'              => $make,
-                ':model'             => $model,
-                ':year'              => $year,
-                ':color'             => $color,
-                ':interior_color'    => $interior_color,
-                ':miles'             => $miles,
-                ':style'             => $style,
-                ':vehicle_condition' => $condition,
-                ':book_price'        => $book_price,
-            ]);
+      $stmt->execute([
+        ':vin' => $vin,
+        ':make' => $make,
+        ':model' => $model,
+        ':year' => $year,
+        ':color' => $color,
+        ':interior_color' => $interior_color,
+        ':miles' => $miles,
+        ':style' => $style,
+        ':vehicle_condition' => $condition,
+        ':book_price' => $book_price,
+      ]);
 
-            // Add new purchase
-            $stmt = $conn->prepare("
+      // Add new purchase
+      $stmt = $conn->prepare("
                 INSERT INTO purchase (vin, purchase_date, location, auction, seller, price_paid)
                 VALUES (:vin, :purchase_date, :location, :auction, :seller, :price_paid)
             ");
-            $stmt->execute([
-                ':vin'           => $vin,
-                ':purchase_date' => $date,
-                ':location'      => $location,
-                ':auction'       => $auction,
-                ':seller'        => $seller,
-                ':price_paid'    => $price_paid,
-            ]);
+      $stmt->execute([
+        ':vin' => $vin,
+        ':purchase_date' => $date,
+        ':location' => $location,
+        ':auction' => $auction,
+        ':seller' => $seller,
+        ':price_paid' => $price_paid,
+      ]);
 
-            // get last id inserted
-            $purchase_id = $conn->lastInsertId();
+      // get last id inserted
+      $purchase_id = $conn->lastInsertId();
 
-            // add each vehicle problem into repair table
-            if (!empty($problems)) {
-                $stmt = $conn->prepare("
+      // add each vehicle problem into repair table
+      if (!empty($problems)) {
+        $stmt = $conn->prepare("
                     INSERT INTO repair (purchase_id, description, estimated_cost, actual_cost)
                     VALUES (:purchase_id, :description, :estimated_cost, :actual_cost)
                 ");
-                foreach ($problems as $problem) {
-                    $stmt->execute([
-                        ':purchase_id'    => $purchase_id,
-                        ':description'    => $problem['description'],
-                        ':estimated_cost' => $problem['estimated_cost'],
-                        ':actual_cost'    => $problem['actual_cost'],
-                    ]);
-                }
-            }
-
-            $conn->commit();
-            $success = true;
-
-            header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
-            exit;
-
-        } catch (PDOException $e) {
-            $conn->rollBack();
-            $error = "Database error: " . $e->getMessage();
+        foreach ($problems as $problem) {
+          $stmt->execute([
+            ':purchase_id' => $purchase_id,
+            ':description' => $problem['description'],
+            ':estimated_cost' => $problem['estimated_cost'],
+            ':actual_cost' => $problem['actual_cost'],
+          ]);
         }
+      }
+
+      $conn->commit();
+      $success = true;
+
+      header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+      exit;
+
+    } catch (PDOException $e) {
+      $conn->rollBack();
+      $error = "Database error: " . $e->getMessage();
     }
+  }
 }
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Purchase Car</title>
-</head>
+
+    <?php include('templates/header.php'); ?>
+
 <body>
     <?php if (isset($_GET['success'])): ?>
         <p class="success">Vehicle purchased and saved successfully!</p>
@@ -129,9 +131,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>Enter Car Purchase Details</h1>
 
     <?php if ($success): ?>
-        <p class="success">Vehicle purchased and saved successfully!</p>
+            <p class="success">Vehicle purchased and saved successfully!</p>
     <?php elseif ($error): ?>
-        <p class="error"><?= htmlspecialchars($error) ?></p>
+            <p class="error"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 
     <form method="POST">
@@ -228,4 +230,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </body>
+
+<?php if (isset($_GET['success'])): ?>
+    <p class="success">Vehicle purchased and saved successfully!</p>
+<?php elseif ($error): ?>
+    <p class="error"><?= htmlspecialchars($error) ?></p>
+<?php endif; ?>
 </html>
