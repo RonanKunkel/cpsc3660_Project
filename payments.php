@@ -22,7 +22,7 @@ class Payment
     $this->bank_id = (int) $_post['bank_id'] ?? 0; 
   }
 
-  public function save($conn)
+  public function save($conn): void
   {
     $stmt = $conn->prepare("
       INSERT INTO payment (customer_id, sale_id, payment_date, due, paid_date, amount, bank_id) 
