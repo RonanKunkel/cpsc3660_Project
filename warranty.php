@@ -16,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $warranties[] = [
                 'start_date'    => trim($w['start_date'] ?? ''),
                 'end_date'      => trim($w['end_date'] ?? ''),
-                'policy_name'   => trim($w['policy_name'] ?? ''),
-                'items_covered' => trim($w['items_covered'] ?? ''),
+                'warranty_type_id' => (int)($w['warranty_type_id'] ?? 0),
                 'cost'          => (float)($w['cost'] ?? 0),
                 'monthly_cost'  => (float)($w['monthly_cost'] ?? 0),
                 'deductible'    => (float)($w['deductible'] ?? 0)
@@ -55,12 +54,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ");
 
             foreach ($warranties as $w) {
+                $typeStmt = $conn->prepare("
+                    SELECT name, items_covered
+                    FROM warranty_types
+                    WHERE id = :id
+                ");
+                $typeStmt->execute([
+                    ':id' => $w['warranty_type_id']
+                ]);
+                $type = $typeStmt->fetch(PDO::FETCH_ASSOC);
+
                 $stmt->execute([
                     ':sale_id'       => $sale_id,
                     ':start_date'    => $w['start_date'],
                     ':end_date'      => $w['end_date'],
-                    ':policy_name'   => $w['policy_name'],
-                    ':items_covered' => $w['items_covered'],
+                    ':policy_name'   => $type['name'],
+                    ':items_covered' => $type['items_covered'],
                     ':cost'          => $w['cost'],
                     ':monthly_cost'  => $w['monthly_cost'],
                     ':deductible'    => $w['deductible']
@@ -131,10 +140,15 @@ document.getElementById('add-warranty-btn').addEventListener('click', () => {
         <input type="date" name="warranties[${index}][start_date]" required><br>
         <label>End Date:</label>
         <input type="date" name="warranties[${index}][end_date]" required><br>
-        <label>Policy Name:</label>
-        <input type="text" name="warranties[${index}][policy_name]" required><br>
-        <label>Items Covered:</label>
-        <input type="text" name="warranties[${index}][items_covered]" required><br>
+        <label>Warranty Type:</label>
+        <select name="warranties[${index}][warranty_type_id]" required>
+            <?php
+            $types = $conn->query("SELECT id, name FROM warranty_types");
+            foreach ($types as $t) {
+                echo "<option value='{$t['id']}'>{$t['name']}</option>";
+            }
+            ?>
+        </select><br>
         <label>Cost:</label>
         <input type="number" step="0.01" name="warranties[${index}][cost]" required><br>
         <label>Monthly Cost:</label>

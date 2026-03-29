@@ -125,6 +125,14 @@ CREATE TABLE IF NOT EXISTS repair (
     FOREIGN KEY (purchase_id) REFERENCES purchase(id)
 );
 
+CREATE TABLE IF NOT EXISTS warranty_types (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    items_covered TEXT NOT NULL,
+
+    PRIMARY KEY (id)
+);
+
 INSERT INTO vehicle (vin, make, model, year, color, interior_color, miles, style, vehicle_condition, book_price) VALUES
     ('KL1TD56E59B639081', 'BMW', '328i xDrive', 2011, 'Alpine White', 'Brown', 190000, 'Wagon', 'Light Wear', 8500.00),
     ('1XKAD29X8KJ533154', 'Ford', 'Taurus', 2006, 'Light Brown', 'Brown', 225000, 'Sedan', 'Moderate Wear', 3200.00),
@@ -277,3 +285,8 @@ INSERT INTO payment (customer_id, sale_id, payment_date, due, paid_date, amount,
     (8, 8, '2026-04-02', 1, '2026-04-02', 108.33, 756183429),
     (9, 9, '2026-04-12', 1, '2026-04-15', 116.66, 312845679),
     (10, 10, '2026-04-20', 1, '2026-04-20', 133.33, 864279531);
+
+INSERT INTO warranty_types (name, items_covered) VALUES
+('Basic', 'Engine, Transmission'),
+('Comprehensive', 'Engine, Transmission, Suspension'),
+('Premium', 'Engine, Transmission, Suspension, Electrical, A/C');
