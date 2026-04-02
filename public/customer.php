@@ -4,112 +4,112 @@ require '../config/db.php';
 
 class Employer
 {
-  public readonly string $name;
-  public readonly string $title;
-  public readonly string $super;
-  public readonly string $phone;
-  public readonly string $address;
-  public readonly string $start_date;
+    public readonly string $name;
+    public readonly string $title;
+    public readonly string $super;
+    public readonly string $phone;
+    public readonly string $address;
+    public readonly string $start_date;
 
-  public function __construct(array $_post)
-  {
-    $this->name = trim($_post['name'] ?? '');
-    $this->title = trim($_post['title'] ?? '');
-    $this->super = trim($_post['super'] ?? '');
-    $this->phone = trim($_post['phone'] ?? '');
-    $this->address = trim($_post['address'] ?? '');
-    $this->start_date = trim($_post['start_date'] ?? '');
-  }
+    public function __construct(array $_post)
+    {
+        $this->name = trim($_post['name'] ?? '');
+        $this->title = trim($_post['title'] ?? '');
+        $this->super = trim($_post['super'] ?? '');
+        $this->phone = trim($_post['phone'] ?? '');
+        $this->address = trim($_post['address'] ?? '');
+        $this->start_date = trim($_post['start_date'] ?? '');
+    }
 
-  public function _execute(int $customer_id, $stmt)
-  {
-    $stmt->execute([
-      ':customer_id' => $customer_id,
-      ':employer' => $this->name,
-      ':title' => $this->title,
-      ':supervisor' => $this->super,
-      ':supervisor_phone' => $this->phone,
-      ':address' => $this->address,
-      ':start_date' => $this->start_date,
-    ]);
-  }
+    public function _execute(int $customer_id, $stmt)
+    {
+        $stmt->execute([
+          ':customer_id' => $customer_id,
+          ':employer' => $this->name,
+          ':title' => $this->title,
+          ':supervisor' => $this->super,
+          ':supervisor_phone' => $this->phone,
+          ':address' => $this->address,
+          ':start_date' => $this->start_date,
+        ]);
+    }
 }
 
 class Customer
 {
-  private string $first_name;
-  private string $last_name;
-  private string $phone;
-  private string $address;
-  private string $city;
-  private string $state;
-  private string $zip;
-  private string $gender;
-  private string $date_of_birth;
-  private array $employment_history = [];
+    private string $first_name;
+    private string $last_name;
+    private string $phone;
+    private string $address;
+    private string $city;
+    private string $state;
+    private string $zip;
+    private string $gender;
+    private string $date_of_birth;
+    private array $employment_history = [];
 
-  public function __construct(array $_post)
-  {
-    $this->first_name = trim($_post['first_name'] ?? '');
-    $this->last_name = trim($_post['last_name'] ?? '');
-    $this->phone = trim($_post['phone'] ?? '');
-    $this->address = trim($_post['address'] ?? '');
-    $this->city = trim($_post['city'] ?? '');
-    $this->state = trim($_post['state'] ?? '');
-    $this->zip = trim($_post['zip'] ?? '');
-    $this->gender = trim($_post['gender'] ?? '');
-    $this->date_of_birth = trim($_post['date_of_birth'] ?? '');
-  }
-
-  public function setEmploymentHistory(array $employers)
-  {
-    foreach ($employers as $employer) {
-      $this->employment_history[] = new Employer($employer);
+    public function __construct(array $_post)
+    {
+        $this->first_name = trim($_post['first_name'] ?? '');
+        $this->last_name = trim($_post['last_name'] ?? '');
+        $this->phone = trim($_post['phone'] ?? '');
+        $this->address = trim($_post['address'] ?? '');
+        $this->city = trim($_post['city'] ?? '');
+        $this->state = trim($_post['state'] ?? '');
+        $this->zip = trim($_post['zip'] ?? '');
+        $this->gender = trim($_post['gender'] ?? '');
+        $this->date_of_birth = trim($_post['date_of_birth'] ?? '');
     }
-  }
 
-  public function save($conn)
-  {
-    $stmt = $conn->prepare("
+    public function setEmploymentHistory(array $employers)
+    {
+        foreach ($employers as $employer) {
+            $this->employment_history[] = new Employer($employer);
+        }
+    }
+
+    public function save($conn)
+    {
+        $stmt = $conn->prepare("
       INSERT INTO customer (last_name, first_name, gender, date_of_birth, phone, address, city, state, zip)
       VALUES (:last_name, :first_name, :gender, :date_of_birth, :phone, :address, :city, :state, :zip)
     ");
-    $stmt->execute([
-      ':last_name' => $this->last_name,
-      ':first_name' => $this->first_name,
-      ':gender' => $this->gender,
-      ':date_of_birth' => $this->date_of_birth,
-      ':phone' => $this->phone,
-      ':address' => $this->address,
-      ':city' => $this->city,
-      ':state' => $this->state,
-      ':zip' => $this->zip,
-    ]);
-    $customer_id = (int)$conn->lastInsertId();
-    if (!empty($this->employment_history)) {
-      $stmt = $conn->prepare("
+        $stmt->execute([
+          ':last_name' => $this->last_name,
+          ':first_name' => $this->first_name,
+          ':gender' => $this->gender,
+          ':date_of_birth' => $this->date_of_birth,
+          ':phone' => $this->phone,
+          ':address' => $this->address,
+          ':city' => $this->city,
+          ':state' => $this->state,
+          ':zip' => $this->zip,
+        ]);
+        $customer_id = (int)$conn->lastInsertId();
+        if (!empty($this->employment_history)) {
+            $stmt = $conn->prepare("
       INSERT INTO employment_history (customer_id, employer, title, supervisor, supervisor_phone, address, start_date)
       VALUES (:customer_id, :employer, :title, :supervisor, :supervisor_phone, :address, :start_date)");
-      foreach ($this->employment_history as $employer) {
-        $employer->_execute($customer_id, $stmt);
-      }
+            foreach ($this->employment_history as $employer) {
+                $employer->_execute($customer_id, $stmt);
+            }
+        }
     }
-  }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $customer = new Customer($_POST);
-  $customer->setEmploymentHistory($_POST['employers'] ?? []);
-  try {
-    $conn->beginTransaction();
-    $customer->save($conn);
-    $conn->commit();
-    header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
-    exit;
-  } catch (PDOException $e) {
-    $conn->rollBack();
-    $error = "Database error: " . $e->getMessage();
-  }
+    $customer = new Customer($_POST);
+    $customer->setEmploymentHistory($_POST['employers'] ?? []);
+    try {
+        $conn->beginTransaction();
+        $customer->save($conn);
+        $conn->commit();
+        header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+        exit;
+    } catch (PDOException $e) {
+        $conn->rollBack();
+        $error = "Database error: " . $e->getMessage();
+    }
 }
 ?>
 
@@ -193,7 +193,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </script>
     </form>
   </section>
-  <?php include('../templates/footer.php'); ?>
 
 </body>
 

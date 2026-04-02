@@ -159,7 +159,6 @@ $latePayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </table>
     </section>
-    <?php include('../templates/footer.php'); ?>
 
 </body>
 

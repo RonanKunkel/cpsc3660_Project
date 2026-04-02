@@ -62,7 +62,6 @@ $inventory = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
         </div>
     </section>
-    <?php include('../templates/footer.php'); ?>
 </body>
 
 </html>

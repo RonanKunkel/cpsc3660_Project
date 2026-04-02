@@ -86,9 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <p class="error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
         <form method="POST">
-            <h1>Enter Car Selling Details</h1>
+            <h2>Enter Car Selling Details</h2>
 
-            <h2>Identifiers</h2>
+            <h3>Identifiers</h3>
 
             <label for="customer_id">Customer ID:</label>
             <input type="number" id="customer_id" name="customer_id" min="0" required><br><br>
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="employee_id">Employee ID:</label>
             <input type="number" id="employee_id" name="employee_id" min="0" required><br><br>
 
-            <h2>Sale Info</h2>
+            <h3>Sale Info</h3>
 
             <label for="sale_date">Sale Date:</label>
             <input type="date" id="sale_date" name="sale_date" required><br><br>
@@ -119,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit">Submit</button>
         </form>
     </section>
-    <?php include('../templates/footer.php'); ?>
 
 </body>
 
