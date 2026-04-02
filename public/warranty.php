@@ -1,5 +1,6 @@
 <?php
-require 'db.php';
+require '../config/db.php';
+
 
 $sale_id = $employee_id = $customer_id = '';
 $warranties = [];
@@ -25,10 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Validation
-    if (empty($employee_id)) $error = "Salesperson ID required.";
-    elseif (empty($customer_id)) $error = "Customer ID required.";
-    elseif (empty($warranties)) $error = "At least one warranty must be added.";
-    else {
+    if (empty($employee_id)) {
+        $error = "Salesperson ID required.";
+    } elseif (empty($customer_id)) {
+        $error = "Customer ID required.";
+    } elseif (empty($warranties)) {
+        $error = "At least one warranty must be added.";
+    } else {
         try {
             $conn->beginTransaction();
 
@@ -88,52 +92,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Enter Warranties</title>
-</head>
+
+<?php include('../templates/head.php'); ?>
+
 <body>
-<h1>Enter Warranties for Vehicle Sale</h1>
+    <?php include('../templates/header.php'); ?>
+    <section class="main-content">
 
-<?php if ($success): ?>
-    <p style="color:green;">Warranties saved successfully!</p>
-<?php elseif ($error): ?>
-    <p style="color:red;"><?= htmlspecialchars($error) ?></p>
-<?php endif; ?>
 
-<form method="POST">
-    <h2>Vehicle Info</h2>
-    <label for="vin">VIN:</label>
-    <input type="text" id="vin" name="vin" maxlength="17" required><br><br>
+        <h2>Enter Warranties for Vehicle Sale</h2>
 
-    <label for="sale_date">Sale Date:</label>
-    <input type="date" id="sale_date" name="sale_date" required><br><br>
+        <?php if ($success): ?>
+            <p style="color:green;">Warranties saved successfully!</p>
+        <?php elseif ($error): ?>
+            <p style="color:red;"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
 
-    <label for="sale_price">Sale Price:</label>
-    <input type="number" step="0.01" id="sale_price" name="sale_price" required><br><br>
+        <form method="POST">
+            <h3>Vehicle Info</h3>
+            <label for="vin">VIN:</label>
+            <input type="text" id="vin" name="vin" maxlength="17" required><br><br>
 
-    <h2>Employee (Salesperson)</h2>
-    <label for="employee_id">Employee ID:</label>
-    <input type="number" id="employee_id" name="employee_id" required><br><br>
+            <label for="sale_date">Sale Date:</label>
+            <input type="date" id="sale_date" name="sale_date" required><br><br>
 
-    <h2>Customer</h2>
-    <label for="customer_id">Customer ID:</label>
-    <input type="number" id="customer_id" name="customer_id" required><br><br>
+            <label for="sale_price">Sale Price:</label>
+            <input type="number" step="0.01" id="sale_price" name="sale_price" required><br><br>
 
-    <h2>Warranties</h2>
-    <div id="warranties-container"></div>
-    <button type="button" id="add-warranty-btn">Add Warranty</button><br><br>
+            <h3>Employee (Salesperson)</h3>
+            <label for="employee_id">Employee ID:</label>
+            <input type="number" id="employee_id" name="employee_id" required><br><br>
 
-    <button type="submit">Submit</button>
-</form>
+            <h3>Customer</h3>
+            <label for="customer_id">Customer ID:</label>
+            <input type="number" id="customer_id" name="customer_id" required><br><br>
 
-<script>
-let warrantyCount = 0;
-const container = document.getElementById('warranties-container');
+            <h3>Warranties</h3>
+            <div id="warranties-container"></div>
+            <button type="button" id="add-warranty-btn">Add Warranty</button><br><br>
 
-document.getElementById('add-warranty-btn').addEventListener('click', () => {
-    const index = warrantyCount++;
-    const div = document.createElement('div');
-    div.innerHTML = `
+            <button type="submit">Submit</button>
+        </form>
+
+        <script>
+            let warrantyCount = 0;
+            const container = document.getElementById('warranties-container');
+
+            document.getElementById('add-warranty-btn').addEventListener('click', () => {
+                const index = warrantyCount++;
+                const div = document.createElement('div');
+                div.innerHTML = `
         <hr>
         <button type="button" onclick="this.parentElement.remove()">Remove</button><br>
         <label>Start Date:</label>
@@ -156,8 +164,10 @@ document.getElementById('add-warranty-btn').addEventListener('click', () => {
         <label>Deductible:</label>
         <input type="number" step="0.01" name="warranties[${index}][deductible]" required><br>
     `;
-    container.appendChild(div);
-});
-</script>
+                container.appendChild(div);
+            });
+        </script>
+    </section>
 </body>
+
 </html>
