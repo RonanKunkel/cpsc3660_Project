@@ -1,5 +1,6 @@
 <?php
-require 'db.php';
+require '../config/db.php';
+
 
 class Employer
 {
@@ -38,12 +39,12 @@ class Customer
 {
   private string $first_name;
   private string $last_name;
-  private string $phone; 
-  private string $address; 
+  private string $phone;
+  private string $address;
   private string $city;
-  private string $state; 
+  private string $state;
   private string $zip;
-  private string $gender; 
+  private string $gender;
   private string $date_of_birth;
   private array $employment_history = [];
 
@@ -114,55 +115,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html>
-<?php include('templates/header.php'); ?>
+
+<?php include('../templates/head.php'); ?>
+
 <body>
-    <h2>Add Customer Details</h2>
-    <form method="POST"> 
+  <?php include('../templates/header.php'); ?>
+  <section class="main-content">
+    <form method="POST">
+      <h2>Add Customer Details</h2>
+
       <h3>Personal Info</h3>
-        <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" maxlength="20" minlength="2" required><br><br>
+      <label for="first_name">First Name:</label>
+      <input type="text" id="first_name" name="first_name" maxlength="20" minlength="2" required><br><br>
 
-        <label for="last_name">Last Name</label>
-        <input type="text" id="last_name" name="last_name" maxlength="20" minlength="2" required><br><br>
+      <label for="last_name">Last Name</label>
+      <input type="text" id="last_name" name="last_name" maxlength="20" minlength="2" required><br><br>
 
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender" required>
-            <option value="">Gender</option>
-            <option value="Male">Man</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select><br><br>
+      <label for="gender">Gender:</label>
+      <select id="gender" name="gender" required>
+        <option value="">Gender</option>
+        <option value="Male">Man</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select><br><br>
 
-        <label for="date_of_birth">Date of Birth</label>
-        <input type="date" id="date_of_birth" name="date_of_birth" required><br><br>
+      <label for="date_of_birth">Date of Birth</label>
+      <input type="date" id="date_of_birth" name="date_of_birth" required><br><br>
 
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required><br><br>
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone" required><br><br>
 
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" maxlength="50" required><br><br>
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address" maxlength="50" required><br><br>
 
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" required><br><br>
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" required><br><br>
 
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" required><br><br>
+      <label for="state">State:</label>
+      <input type="text" id="state" name="state" required><br><br>
 
-        <label for="zip">Zip/Postal Code:</label>
-        <input type="text" id="zip" name="zip" maxlength="6" minlength="6" required><br><br>
+      <label for="zip">Zip/Postal Code:</label>
+      <input type="text" id="zip" name="zip" maxlength="6" minlength="6" required><br><br>
 
-        <h3>Employers</h3>
-        <div id="employment-container"></div>
-        <button type="button" id="add-employer-button">Add Employer</button><br><br>
-        <button type="submit">Submit</button>
-        <script>
-          let employer_count = 0;
-          const container = document.getElementById('employment-container');
-          document.getElementById('add-employer-button').addEventListener('click', function () {
-            const index = employer_count++;
-            const div = document.createElement('div');
-            div.className = 'employer-entry';
-            div.innerHTML = `
+      <h3>Employers</h3>
+      <div id="employment-container"></div>
+      <button type="button" id="add-employer-button">Add Employer</button><br><br>
+      <button type="submit">Submit</button>
+      <script>
+        let employer_count = 0;
+        const container = document.getElementById('employment-container');
+        document.getElementById('add-employer-button').addEventListener('click', function() {
+          const index = employer_count++;
+          const div = document.createElement('div');
+          div.className = 'employer-entry';
+          div.innerHTML = `
                 <button type="button" class="remove-button" onclick="this.parentElement.remove()">&times;</button>
                 <label>Employer Name</label>
                 <input type="text" name="employers[${index}][name]" required><br><br>
@@ -182,9 +188,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label>Start Date</label>
                 <input type="date" name="employers[${index}][start_date]" required><br><br>
             `;
-            container.appendChild(div);
+          container.appendChild(div);
         });
-        </script>
+      </script>
     </form>
+  </section>
+  <?php include('../templates/footer.php'); ?>
+
 </body>
+
 </html>
