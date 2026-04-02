@@ -95,16 +95,16 @@ INSERT INTO sale (vin, customer_id, employee_id, sale_date, sale_price, down_pay
     ('3LNHM28T47R679651', 10, 1, '2026-03-20', 11999.99, 4000.00, 7999.99, 640.00);
 
 INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered, cost, monthly_cost, deductible) VALUES
-    (1, '2025-12-17', '2028-12-17', 'Comprehensive', 'Engine, Transmission, Suspension', 999.00, 27.75, 250.00),
+    (1, '2025-12-17', '2028-12-17', 'Silver', 'Engine, Transmission, Electrical', 999.00, 27.75, 250.00),
     (2, '2025-12-28', '2027-12-28', 'Basic', 'Engine, Transmission', 599.00, 24.96, 500.00),
-    (3, '2026-01-02', '2029-01-02', 'Comprehensive', 'Engine, Transmission, Suspension, Electrical', 1299.00, 36.08, 250.00),
-    (4, '2026-01-12', '2029-01-12', 'Premium', 'Engine, Transmission, Suspension, Electrical, A/C', 1599.00, 44.42, 200.00),
-    (5, '2026-02-05', '2029-02-05', 'Premium', 'Engine, Transmission, Suspension, Electrical, A/C, Paint', 1999.00, 55.53, 150.00),
+    (3, '2026-01-02', '2029-01-02', 'Silver', 'Engine, Transmission, Electrical', 1299.00, 36.08, 250.00),
+    (4, '2026-01-12', '2029-01-12', 'Gold', 'Engine, Transmission, Electrical, Suspension', 1599.00, 44.42, 200.00),
+    (5, '2026-02-05', '2029-02-05', 'Platinum', 'All major components', 1999.00, 55.53, 150.00),
     (6, '2026-02-12', '2028-02-12', 'Basic', 'Engine, Transmission', 799.00, 33.29, 500.00),
-    (7, '2026-02-22', '2029-02-22', 'Comprehensive', 'Engine, Transmission, Suspension, Electrical', 1099.00, 30.53, 300.00),
-    (8, '2026-03-02', '2029-03-02', 'Comprehensive', 'Engine, Transmission, Suspension, Electrical, A/C', 1399.00, 38.86, 250.00),
-    (9, '2026-03-12', '2028-03-12', 'Basic', 'Engine, Transmission', 699.00, 29.13, 500.00),
-    (10, '2026-03-20', '2029-03-20', 'Premium', 'Engine, Transmission, Suspension, Electrical, A/C', 999.00, 27.75, 250.00);
+    (7, '2026-02-22', '2029-02-22', 'Silver', 'Engine, Transmission, Electrical', 1099.00, 30.53, 300.00),
+    (8, '2026-03-02', '2029-03-02', 'Silver', 'Engine, Transmission, Electrical', 1399.00, 38.86, 250.00),
+    (9, '2026-03-12', '2028-03-12', 'Platinum', 'All major components', 699.00, 29.13, 500.00),
+    (10, '2026-03-20', '2029-03-20', 'Gold', 'Engine, Transmission, Electrical, Suspension', 999.00, 27.75, 250.00);
 
 INSERT INTO employment_history (customer_id, employer, title, supervisor, supervisor_phone, address, start_date) VALUES
     (1, 'McDonalds', 'Burger Flipper', 'Joe Biden', '403-295-0954', '9735 Elm Street, Toronto, ON', '2008-09-12'),
