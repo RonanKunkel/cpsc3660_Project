@@ -1,37 +1,17 @@
-<head>
-  <title>Jones Auto</title>
-  <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-header {
-  padding: 1em;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  background: #6164B1;
-  justify-content: space-between;
-}
-
-.navbar-container {
-  padding: 4px;
-}
-</style>
-</head> 
-<header>
-  <div class="navbar-container">
-    <h1>Jones Auto</h1>
-  </div>
-  <div>
-    <nav class="navbar-container"> 
-      <button onclick="window.location.href='purchaseCar.php'">Purchase Vehicle</button>
-      <button onclick="window.location.href='carSales.php'">Sell A Car</button>
-      <button onclick="window.location.href='customer.php'">Add a Customer</button>
-      <button onclick="window.location.href='index.php'">Home</button>
-      <button onclick="window.location.href='payments.php'">Add Customer Payments</button>
-  </nav>
-  </div>
-</header>
+<section id="heading">
+  <header>
+    <div class="navbar-container">
+      <h1>Jones Auto</h1>
+    </div>
+    <div class="navbar-container">
+      <nav>
+        <a href="../public/carSales.php" class="_page">Sales</a>
+        <a href="../public/customer.php" class="_page">Add Customer</a>
+        <a href="../public/payments.php" class="_page">Payments</a>
+        <a href="../public/purchaseCar.php" class="_page">Purchase</a>
+        <a href="../public/inventory.php" class="_page">Inventory</a>
+        <a href="../public/index.php" class="_page">Home</a>
+      </nav>
+    </div>
+  </header>
+</section>
