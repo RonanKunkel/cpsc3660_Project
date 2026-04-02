@@ -129,3 +129,11 @@ CREATE TABLE IF NOT EXISTS repair (
   PRIMARY KEY (id),
   FOREIGN KEY (purchase_id) REFERENCES purchase (id)
 );
+
+CREATE TABLE IF NOT EXISTS warranty_types (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    items_covered TEXT NOT NULL,
+
+    PRIMARY KEY (id)
+);
