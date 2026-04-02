@@ -10,6 +10,7 @@ $vin = $make = $model = $year = $color = $interior_color = $miles = $style = $co
 $price_paid = $date = $location = $seller = $auction = '';
 $problems = [];
 $success = false;
+$error = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Vehicle
