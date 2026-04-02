@@ -62,7 +62,7 @@ INSERT INTO repair (purchase_id, description, estimated_cost, actual_cost) VALUE
     (14, 'Differential Service', 200.00, 225.00),
     (15, 'Fuel Injector Cleaning', 250.00, 300.00);
 
-INSERT INTO customer (firstName, lastName, gender, dateOfBirth, phone, address, city, state, zip) VALUES
+INSERT INTO customer (first_name, last_name, gender, date_of_birth, phone, address, city, state, zip) VALUES
     ('Lewis', 'Augustine', 'Male', '1991-07-09', '403-427-0934', '8107 Valley Drive', 'Lethbridge', 'Alberta', 'R4K 0N4'),
     ('Leopoldo', 'Hodge', 'Male', '1997-12-02', '403-4245-3663', '524 Winding Way', 'Lethbridge', 'Alberta', 'L2A 4S7'),
     ('Jennifer', 'Sanford', 'Female', '2003-10-31', '403-478-0662', '287 Myrtle Avenue', 'Coaldale', 'Alberta', 'R8A 2M0'),
