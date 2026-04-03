@@ -26,7 +26,10 @@ CREATE TABLE IF NOT EXISTS employment_history (
   address VARCHAR (50),
   start_date DATE,
   PRIMARY KEY (id),
-  FOREIGN KEY (customer_id) REFERENCES customer (id)
+  FOREIGN KEY (customer_id)
+    REFERENCES customer (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS vehicle (
@@ -75,9 +78,18 @@ CREATE TABLE IF NOT EXISTS sale (
   financed_amount DECIMAL (10, 2),
   commission DECIMAL (10, 2),
   PRIMARY KEY (id),
-  FOREIGN KEY (vin) REFERENCES vehicle (vin),
-  FOREIGN KEY (customer_id) REFERENCES customer (id),
-  FOREIGN KEY (employee_id) REFERENCES employee (id)
+  FOREIGN KEY (vin) 
+    REFERENCES vehicle (vin)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (customer_id) 
+    REFERENCES customer (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (employee_id) 
+    REFERENCES employee (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS warranty (
@@ -91,7 +103,10 @@ CREATE TABLE IF NOT EXISTS warranty (
   monthly_cost DECIMAL (10, 2),
   deductible DECIMAL (10, 2),
   PRIMARY KEY (id),
-  FOREIGN KEY (sale_id) REFERENCES sale (id)
+  FOREIGN KEY (sale_id)
+    REFERENCES sale (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS purchase (
@@ -103,7 +118,10 @@ CREATE TABLE IF NOT EXISTS purchase (
   seller VARCHAR (30),
   price_paid DECIMAL (10, 2),
   PRIMARY KEY (id),
-  FOREIGN KEY (vin) REFERENCES vehicle (vin)
+  FOREIGN KEY (vin)
+    REFERENCES vehicle (vin)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS payment (
@@ -116,8 +134,14 @@ CREATE TABLE IF NOT EXISTS payment (
   amount DECIMAL (10, 2),
   bank_id INT,
   PRIMARY KEY (id),
-  FOREIGN KEY (customer_id) REFERENCES customer (id),
-  FOREIGN KEY (sale_id) REFERENCES sale (id)
+  FOREIGN KEY (customer_id)
+    REFERENCES customer (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (sale_id)
+    REFERENCES sale (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS repair (
@@ -127,7 +151,10 @@ CREATE TABLE IF NOT EXISTS repair (
   estimated_cost DECIMAL (10, 2),
   actual_cost DECIMAL (10, 2),
   PRIMARY KEY (id),
-  FOREIGN KEY (purchase_id) REFERENCES purchase (id)
+  FOREIGN KEY (purchase_id) 
+    REFERENCES purchase (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS warranty_types (

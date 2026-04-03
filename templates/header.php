@@ -30,6 +30,7 @@ $user_type = $_SESSION['user_type'] ?? null;
           <a href="../public/warranty.php" class="_page">Add Warranty</a>
           <a href="../public/inventory.php" class="_page">View Inventory</a>
           <a href="../public/report.php" class="_page">Monthly Report</a>
+          <a href="../public/payments.php" class="_page">Create Payment</a>
         <?php else: ?>
           <a href="../public/index.php" class="_page">Login</a>
         <?php endif; ?>
