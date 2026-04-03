@@ -9,7 +9,7 @@ require '../config/db.php';
 <body>
     <?php include('../templates/header.php'); ?>
     <section class="main-content">
-        <h2>Admin</h2>
+        <h2>Employee</h2>
     </section>
 
 </body>
