@@ -28,6 +28,7 @@ if (!empty($selected_warranty_type)) {
 // form stuff
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
+    $sale_id = trim($_POST['sale_id'] ?? '');
     $employee_id = trim($_POST['employee_id'] ?? '');
     $customer_id = trim($_POST['customer_id'] ?? '');
 
@@ -41,7 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
     ];
 
     // error stuff if missing input
-    if (empty($employee_id)) {
+    if (empty($sale_id)) {
+        $error = "Sale ID required.";
+    } elseif (empty($employee_id)) {
         $error = "Salesperson ID required.";
     } elseif (empty($customer_id)) {
         $error = "Customer ID required.";
@@ -49,39 +52,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
         try {
             $conn->beginTransaction();
 
-            // create sale
-            $stmt = $conn->prepare("
-                INSERT INTO sale (vin, customer_id, employee_id, sale_date, sale_price)
-                VALUES (:vin, :customer_id, :employee_id, :sale_date, :sale_price)
-            ");
-
-            $stmt->execute([
-                ':vin' => $_POST['vin'] ?? '',
-                ':customer_id' => $customer_id,
-                ':employee_id' => $employee_id,
-                ':sale_date' => $_POST['sale_date'] ?? date('Y-m-d'),
-                ':sale_price' => (float)($_POST['sale_price'] ?? 0)
-            ]);
-
-            $sale_id = $conn->lastInsertId();
-
-            //get warranty type info
+            // get warranty type info
             $typeStmt = $conn->prepare("
                 SELECT name, items_covered
                 FROM warranty_types
                 WHERE id = :id
             ");
-
             $typeStmt->execute([
                 ':id' => $warranty['warranty_type_id']
             ]);
-
             $type = $typeStmt->fetch(PDO::FETCH_ASSOC);
 
             // insert the warranty
             $stmt = $conn->prepare("
-                INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered, cost, monthly_cost, deductible)
-                VALUES (:sale_id, :start_date, :end_date, :policy_name, :items_covered, :cost, :monthly_cost, :deductible)
+                INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered, cost, monthly_cost, deductible, employee_id, customer_id)
+                VALUES (:sale_id, :start_date, :end_date, :policy_name, :items_covered, :cost, :monthly_cost, :deductible, :employee_id, :customer_id)
             ");
 
             $stmt->execute([
@@ -92,7 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
                 ':items_covered' => $type['items_covered'],
                 ':cost' => $warranty['cost'],
                 ':monthly_cost' => $warranty['monthly_cost'],
-                ':deductible' => $warranty['deductible']
+                ':deductible' => $warranty['deductible'],
+                ':employee_id' => $employee_id,
+                ':customer_id' => $customer_id
             ]);
 
             $conn->commit();
@@ -128,14 +115,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
 <h3>Vehicle Info</h3>
 
-<label>VIN:</label>
-<input type="text" name="vin" maxlength="17" required><br><br>
-
-<label>Sale Date:</label>
-<input type="date" name="sale_date" required><br><br>
-
-<label>Sale Price:</label>
-<input type="number" step="0.01" name="sale_price" required><br><br>
+<label>Sale ID:</label>
+<input type="number" name="sale_id" required><br><br>
 
 <h3>Employee</h3>
 <input type="number" name="employee_id" required><br><br>
@@ -152,14 +133,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 <input type="date" name="warranties[0][end_date]" required><br>
 
 <label>Warranty Type:</label>
-<select name="warranties[0][warranty_type_id]"
-        onchange="this.form.submit()" required>
-
+<select id="warranty_type" name="warranties[0][warranty_type_id]" required>
+<option value=""> Select Warranty </option>
 <?php
 $types = $conn->query("SELECT id, name FROM warranty_types");
 foreach ($types as $t) {
-    $selected = ($selected_warranty_type == $t['id']) ? 'selected' : '';
-    echo "<option value='{$t['id']}' $selected>{$t['name']}</option>";
+    echo "<option value='{$t['id']}'>{$t['name']}</option>";
 }
 ?>
 </select><br>
