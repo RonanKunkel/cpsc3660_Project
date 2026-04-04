@@ -52,5 +52,12 @@ After getting the functionality of the website down, we extensively tested every
 ## Assumptions Made:
 
 ## What we Learned:
+1. Creating and Using DB
+2. Using XAMPP
+3. Connecting PHP and SQL
 
 ## Project Improvements:
+**1. Cleaner Code**
+Although we tried to keep our code clean and organized, we always improve. For example, in the schema, some attributes are camel case, while others are snake case.
+**2. Normalization**
+As we learned normalization later in the semester, we were not able to apply these skills earlier on when we started on the project, which led to a DB which could use some normalization. For example, the vehicle purchase table contains auction, location, and seller. If the company buys from a single auction often, then there would be quite a bit of redundant data in the tables. This table could be split into purchase and seller for example instead.
