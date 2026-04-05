@@ -56,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
             $conn->commit();
             $success = true;
-
         } catch (PDOException $e) {
             $conn->rollBack();
             $error = "Database error: " . $e->getMessage();
@@ -74,51 +73,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
     <section class="main-content">
 
-    <h2>Enter Warranty for Vehicle Sale</h2>
 
-    <?php if ($success): ?>
-        <p style="color:green;">Warranty saved successfully!</p>
-    <?php elseif ($error): ?>
-        <p style="color:red;"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
 
-    <form method="POST">
+        <h2>Enter Warranty for Vehicle Sale</h2>
 
-    <h3>Vehicle Info</h3>
-    <label>Sale ID:</label>
-    <input type="number" name="sale_id" required><br><br>
+        <?php if ($success): ?>
+            <p style="color:green;">Warranty saved successfully!</p>
+        <?php elseif ($error): ?>
+            <p style="color:red;"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
 
-    <h3>Warranty</h3>
+        <form method="POST">
 
-    <label>Start Date:</label>
-    <input type="date" name="warranties[0][start_date]" required><br>
+            <h3>Vehicle Info</h3>
+            <label>Sale ID:</label>
+            <input type="number" name="sale_id" required><br><br>
 
-    <label>End Date:</label>
-    <input type="date" name="warranties[0][end_date]" required><br>
+            <h3>Warranty</h3>
 
-    <label>Warranty Type:</label>
-    <select id="warranty_type" name="warranties[0][warranty_type_id]" required>
-        <option value="">Select Warranty</option>
-        <?php
-        $types = $conn->query("SELECT id, name FROM warranty_types");
-        foreach ($types as $t) {
-            echo "<option value='{$t['id']}'>{$t['name']}</option>";
-        }
-        ?>
-    </select><br><br>
+            <label>Start Date:</label>
+            <input type="date" name="warranties[0][start_date]" required><br>
 
-    <label>Cost:</label>
-    <input type="number" step="0.01" min="0" name="warranties[0][cost]" required><br>
+            <label>End Date:</label>
+            <input type="date" name="warranties[0][end_date]" required><br>
 
-    <label>Monthly Cost:</label>
-    <input type="number" step="0.01" min="0" name="warranties[0][monthly_cost]" required><br>
+            <label>Warranty Type:</label>
+            <select id="warranty_type" name="warranties[0][warranty_type_id]" required>
+                <option value="">Select Warranty</option>
+                <?php
+                $types = $conn->query("SELECT id, name FROM warranty_types");
+foreach ($types as $t) {
+    echo "<option value='{$t['id']}'>{$t['name']}</option>";
+}
+?>
+            </select><br><br>
 
-    <label>Deductible:</label>
-    <input type="number" step="0.01" min="0" name="warranties[0][deductible]" required><br><br>
+            <label>Cost:</label>
+            <input type="number" step="0.01" min="0" name="warranties[0][cost]" required><br>
 
-    <button type="submit" name="submit_form">Submit</button>
+            <label>Monthly Cost:</label>
+            <input type="number" step="0.01" min="0" name="warranties[0][monthly_cost]" required><br>
 
-    </form>
+            <label>Deductible:</label>
+            <input type="number" step="0.01" min="0" name="warranties[0][deductible]" required><br><br>
+
+            <button type="submit" name="submit_form">Submit</button>
+
+        </form>
     </section>
-    </body>
+
+
+</body>
+
 </html>

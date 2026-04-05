@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/../config/db.php');
 
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
 
 $user_id = $_SESSION['user_id'] ?? null;
@@ -10,14 +10,14 @@ $current_vin = $_GET['vin'] ?? '';
 $vehicles = [];
 
 if ($user_id) {
-  $stmt = $conn->prepare("
+    $stmt = $conn->prepare("
         SELECT v.make, v.model, s.vin 
         FROM sale s 
         JOIN vehicle v ON s.vin = v.vin 
         WHERE s.customer_id = ?
         ");
-  $stmt->execute([$user_id]);
-  $vehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->execute([$user_id]);
+    $vehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
 
@@ -28,9 +28,9 @@ if ($user_id) {
     </div>
     <div class="navbar-container">
       <nav>
-        <a href="#" class="_page" onclick="checkVehicle(event, '../../public/view/vehicleInfo.php')">View Vehicle Info</a>
-        <a href="#" class="_page" onclick="checkVehicle(event, '../../public/view/paymentHistoryView.php')">View Payment History</a>
-        <a href="#" class="_page" onclick="checkVehicle(event, '../../public/entry/makePayment.php')">Make Payment</a>
+        <a href="#" class="_page" onclick="checkVehicle(event, '../view/vehicleInfo.php')">View Vehicle Info</a>
+        <a href="#" class="_page" onclick="checkVehicle(event, '../view/paymentHistoryView.php')">View Payment History</a>
+        <a href="#" class="_page" onclick="checkVehicle(event, '../entry/makePayment.php')">Make Payment</a>
       </nav>
     </div>
     <div class="navbar-container">
