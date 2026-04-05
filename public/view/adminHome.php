@@ -10,6 +10,7 @@ require '../../config/db.php';
     <?php include('../../templates/header.php'); ?>
     <section class="main-content">
         <h2>Admin</h2>
+        <p>Welcome Admin!</p>
     </section>
 
 </body>

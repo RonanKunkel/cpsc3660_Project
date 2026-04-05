@@ -24,13 +24,14 @@ if ($user_id) {
 <section id="heading">
   <header>
     <div class="navbar-container">
-      <h1>Jones Auto</h1>
+      <h1><a>Jones Auto</a></h1>
     </div>
     <div class="navbar-container">
       <nav>
         <a href="#" class="_page" onclick="checkVehicle(event, '../view/vehicleInfo.php')">View Vehicle Info</a>
         <a href="#" class="_page" onclick="checkVehicle(event, '../view/paymentHistoryView.php')">View Payment History</a>
         <a href="#" class="_page" onclick="checkVehicle(event, '../entry/makePayment.php')">Make Payment</a>
+        <a href="../index.php?logout=1" class="_page">Logout</a>
       </nav>
     </div>
     <div class="navbar-container">
