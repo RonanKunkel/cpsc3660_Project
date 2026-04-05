@@ -102,10 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
                 <option value="">Select Warranty</option>
                 <?php
                 $types = $conn->query("SELECT id, name FROM warranty_types");
-                foreach ($types as $t) {
-                    echo "<option value='{$t['id']}'>{$t['name']}</option>";
-                }
-                ?>
+foreach ($types as $t) {
+    echo "<option value='{$t['id']}'>{$t['name']}</option>";
+}
+?>
             </select><br><br>
 
             <label>Cost:</label>
