@@ -63,7 +63,7 @@ if ($vin) {
         <h1>Vehicle Information</h1>
         <?php if ($vehicleInfo): ?>
             <div >
-                <h2><?php echo htmlspecialchars($vehicleInfo['year']) . ' ' . htmlspecialchars($vehicleInfo['make']) . ' ' . htmlspecialchars($vehicleInfo['model']); ?></h2>
+                <h2><?php echo htmlspecialchars($vehicleInfo['YEAR']) . ' ' . htmlspecialchars($vehicleInfo['make']) . ' ' . htmlspecialchars($vehicleInfo['model']); ?></h2>
                 
                 <p><strong>VIN:</strong> <?php echo htmlspecialchars($vehicleInfo['vin']); ?></p>
                 <p><strong>Color:</strong> <?php echo htmlspecialchars($vehicleInfo['color']); ?></p>
@@ -74,8 +74,9 @@ if ($vin) {
                 
                 <?php if ($sale): ?>
                     <p><strong>Sale Price:</strong> $<?php echo htmlspecialchars(number_format($sale['sale_price'], 2)); ?></p>
+                    <p><strong>Amount Left to Pay:</strong> $<?php echo htmlspecialchars(number_format($sale['sale_price'] - ($sale['down_payment'] + $payments), 2)); ?></p>
                     <p><strong>Amount Paid:</strong> $<?php echo htmlspecialchars(number_format($sale['down_payment'] + $payments, 2)); ?></p>
-                    <p><strong>Amount Left to Pay:</strong> $<?php echo htmlspecialchars(number_format($sale['financed_amount'] - $payments, 2)); ?></p>
+
                 <?php endif; ?>
                 
                 <?php if ($warranty): ?>

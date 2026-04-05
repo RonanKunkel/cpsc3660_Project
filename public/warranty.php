@@ -108,13 +108,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 </select><br><br>
 
 <label>Cost:</label>
-<input type="number" step="0.01" name="warranties[0][cost]" required><br>
+<input type="number" step="0.01" min="0" name="warranties[0][cost]" required><br>
 
 <label>Monthly Cost:</label>
-<input type="number" step="0.01" name="warranties[0][monthly_cost]" required><br>
+<input type="number" step="0.01" min="0" name="warranties[0][monthly_cost]" required><br>
 
 <label>Deductible:</label>
-<input type="number" step="0.01" name="warranties[0][deductible]" required><br><br>
+<input type="number" step="0.01" min="0" name="warranties[0][deductible]" required><br><br>
 
 <button type="submit" name="submit_form">Submit</button>
 
