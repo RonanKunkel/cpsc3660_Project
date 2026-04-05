@@ -28,9 +28,9 @@ if ($user_id) {
     </div>
     <div class="navbar-container">
       <nav>
-        <a href="#" class="_page" onclick="checkVehicle(event, 'vehicleInfo.php')">View Vehicle Info</a>
-        <a href="#" class="_page" onclick="checkVehicle(event, 'paymentHistory.php')">View Payment History</a>
-        <a href="#" class="_page" onclick="checkVehicle(event, 'payment.php')">Make Payment</a>
+        <a href="#" class="_page" onclick="checkVehicle(event, '../../public/view/vehicleInfo.php')">View Vehicle Info</a>
+        <a href="#" class="_page" onclick="checkVehicle(event, '../../public/view/paymentHistoryView.php')">View Payment History</a>
+        <a href="#" class="_page" onclick="checkVehicle(event, '../../public/entry/makePayment.php')">Make Payment</a>
       </nav>
     </div>
     <div class="navbar-container">
