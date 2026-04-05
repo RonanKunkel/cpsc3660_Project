@@ -1,5 +1,5 @@
 <?php
-include '../config/db.php';
+require_once(__DIR__ . '/../config/db.php');
 
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
@@ -10,14 +10,14 @@ $current_vin = $_GET['vin'] ?? '';
 $vehicles = [];
 
 if ($user_id) {
-    $stmt = $conn->prepare("
+  $stmt = $conn->prepare("
         SELECT v.make, v.model, s.vin 
         FROM sale s 
         JOIN vehicle v ON s.vin = v.vin 
         WHERE s.customer_id = ?
         ");
-    $stmt->execute([$user_id]);
-    $vehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $stmt->execute([$user_id]);
+  $vehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
 
