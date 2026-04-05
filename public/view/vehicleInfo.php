@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'customer') {
     exit;
 }
 
-require '../config/db.php';
+require '../../config/db.php';
 
 $vin = $_GET['vin'] ?? null;
 $vehicleInfo = null;
@@ -55,10 +55,10 @@ if ($vin) {
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/customerHeader.php'); ?>
+    <?php include('../../templates/customerHeader.php'); ?>
     <section class="main-content" style="padding: 20px;">
         <h1>Vehicle Information</h1>
         <?php if ($vehicleInfo): ?>
@@ -71,14 +71,14 @@ if ($vin) {
                 <p><strong>Miles:</strong> <?php echo htmlspecialchars($vehicleInfo['miles']); ?></p>
                 <p><strong>Style:</strong> <?php echo htmlspecialchars($vehicleInfo['style']); ?></p>
                 <p><strong>Condition:</strong> <?php echo htmlspecialchars($vehicleInfo['vehicle_condition']); ?></p>
-                
+
                 <?php if ($sale): ?>
                     <p><strong>Sale Price:</strong> $<?php echo htmlspecialchars(number_format($sale['sale_price'], 2)); ?></p>
                     <p><strong>Amount Left to Pay:</strong> $<?php echo htmlspecialchars(number_format($sale['sale_price'] - ($sale['down_payment'] + $payments), 2)); ?></p>
                     <p><strong>Amount Paid:</strong> $<?php echo htmlspecialchars(number_format($sale['down_payment'] + $payments, 2)); ?></p>
 
                 <?php endif; ?>
-                
+
                 <?php if ($warranty): ?>
                     <h3>Current Warranty</h3>
                     <p><strong>Policy Name:</strong> <?php echo htmlspecialchars($warranty['policy_name']); ?></p>

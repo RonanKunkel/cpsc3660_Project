@@ -3,7 +3,7 @@
 <?php endif; ?>
 <?php
 
-require '../config/db.php';
+require '../../config/db.php';
 
 
 $vin = $make = $model = $year = $color = $interior_color = $miles = $style = $condition = $book_price = '';
@@ -121,10 +121,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <!DOCTYPE html>
 <html>
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/header.php'); ?>
+    <?php include('../../templates/header.php'); ?>
     <section class="main-content">
 
         <?php if (isset($_GET['success'])): ?>

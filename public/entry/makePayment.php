@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'customer') {
     exit;
 }
 
-require '../config/db.php';
+require '../../config/db.php';
 
 $vin = $_GET['vin'] ?? null;
 $sale = null;
@@ -79,13 +79,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/customerHeader.php'); ?>
+    <?php include('../../templates/customerHeader.php'); ?>
     <section class="main-content" style="padding: 20px;">
         <h1>Make Payment</h1>
-        <?php if (isset($success)) echo "<p style='color: green;'>$success</p>"; ?>
+        <?php if (isset($success)) {
+            echo "<p style='color: green;'>$success</p>";
+        } ?>
         <?php if ($sale && $next_due): ?>
             <form method="post">
                 <p><strong>Next Due Date:</strong> <?php echo htmlspecialchars($next_due); ?></p>

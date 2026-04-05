@@ -1,6 +1,6 @@
 <?php
 
-require '../config/db.php';
+require '../../config/db.php';
 // get number of cars bought last month
 $stmt = $conn->prepare("
     SELECT COUNT(v.vin)
@@ -93,10 +93,10 @@ $latePayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/header.php'); ?>
+    <?php include('../../templates/header.php'); ?>
     <section class="main-content">
         <h1>Report for <?php echo date('F Y', strtotime('-1 month')); ?></h1>
         <h2>Purchased Cars:</h2>

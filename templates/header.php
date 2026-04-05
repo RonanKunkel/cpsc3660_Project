@@ -1,6 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 
 $user_type = $_SESSION['user_type'] ?? null;
@@ -13,26 +13,28 @@ $user_type = $_SESSION['user_type'] ?? null;
     <div class="navbar-container">
       <nav>
         <?php if ($user_type === 'customer'): ?>
-          <a href="../public/customer.php" class="_page">View Vehicle Info</a>
-          <a href="../public/paymentHistory.php" class="_page">View Payment History</a>
-          <a href="../public/payment.php" class="_page">Make Payment</a>
+          <a href="../../public/view/customerHome.php" class="_page">Customer Home</a>
+          <a href="../../public/view/paymentHistoryView.php" class="_page">View Payment History</a>
+          <a href="../../public/entry/makePayment.php" class="_page">Make Payment</a>
         <?php elseif ($user_type === 'employee'): ?>
-          <a href="../public/purchaseCar.php" class="_page">Purchase Vehicle</a>
-          <a href="../public/addCustomer.php" class="_page">Add Customer</a>
-          <a href="../public/carSales.php" class="_page">Sell Vehicle</a>
-          <a href="../public/warranty.php" class="_page">Add Warranty</a>
-          <a href="../public/inventory.php" class="_page">View Inventory</a>
+          <a href="../../public/view/employeeHome.php" class="_page">Employee Home</a>
+          <a href="../../public/entry/purchaseCar.php" class="_page">Purchase Vehicle</a>
+          <a href="../../public/entry/addCustomer.php" class="_page">Add Customer</a>
+          <a href="../../public/entry/carSales.php" class="_page">Sell Vehicle</a>
+          <a href="../../public/entry/warranty.php" class="_page">Add Warranty</a>
+          <a href="../../public/view/inventoryView.php" class="_page">View Inventory</a>
+
         <?php elseif ($user_type === 'admin'): ?>
-          <a href="../public/purchaseCar.php" class="_page">Purchase Vehicle</a>
-          <a href="../public/addCustomer.php" class="_page">Add Customer</a>
-          <a href="../public/addEmployee.php" class="_page">Add Employee</a>
-          <a href="../public/carSales.php" class="_page">Sell Vehicle</a>
-          <a href="../public/warranty.php" class="_page">Add Warranty</a>
-          <a href="../public/inventory.php" class="_page">View Inventory</a>
-          <a href="../public/report.php" class="_page">Monthly Report</a>
-          <a href="../public/payments.php" class="_page">Create Payment</a>
+          <a href="../../public/entry/purchaseCar.php" class="_page">Purchase Vehicle</a>
+          <a href="../../public/entry/addCustomer.php" class="_page">Add Customer</a>
+          <a href="../../public/entry/addEmployee.php" class="_page">Add Employee</a>
+          <a href="../../public/entry/carSales.php" class="_page">Sell Vehicle</a>
+          <a href="../../public/entry/warranty.php" class="_page">Add Warranty</a>
+          <a href="../../public/view/inventoryView.php" class="_page">View Inventory</a>
+          <a href="../../public/view/report.php" class="_page">Monthly Report</a>
+          <a href="../../public/entry/payments.php" class="_page">Create Payment</a>
         <?php else: ?>
-          <a href="../public/index.php" class="_page">Login</a>
+          <a href="/public/index.php" class="_page">Login</a>
         <?php endif; ?>
       </nav>
     </div>
