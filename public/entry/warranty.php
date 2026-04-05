@@ -73,6 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
     <section class="main-content">
 
+
+
         <h2>Enter Warranty for Vehicle Sale</h2>
 
         <?php if ($success): ?>
@@ -119,6 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
         </form>
     </section>
+
+
 </body>
 
 </html>

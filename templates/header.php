@@ -23,7 +23,6 @@ $user_type = $_SESSION['user_type'] ?? null;
           <a href="../../public/entry/carSales.php" class="_page">Sell Vehicle</a>
           <a href="../../public/entry/warranty.php" class="_page">Add Warranty</a>
           <a href="../../public/view/inventoryView.php" class="_page">View Inventory</a>
-
         <?php elseif ($user_type === 'admin'): ?>
           <a href="../../public/entry/purchaseCar.php" class="_page">Purchase Vehicle</a>
           <a href="../../public/entry/addCustomer.php" class="_page">Add Customer</a>
