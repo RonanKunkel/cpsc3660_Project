@@ -41,6 +41,7 @@ if ($user_type === 'customer') {
           <a href="../../public/view/inventoryView.php" class="_page">Inventory</a>
           <a href="../../public/view/report.php" class="_page">Monthly Report</a>
           <a href="../../public/entry/payments.php" class="_page">Create Payment</a>
+          <a href="../../public/view/paymentHistoryView.php" class="_page">Payment History</a>
           <a href="../../public/view/vehicleInfo.php" class="_page">Vehicle Info</a>
           <a href="../../public/view/vehiclesView.php" class="_page">Vehicles</a>
           <a href="../../public/view/customersView.php" class="_page">Customers</a>
