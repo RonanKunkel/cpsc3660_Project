@@ -1,15 +1,12 @@
 <?php
 require '../../config/db.php';
 
-
-$sale_id = $employee_id = $customer_id = '';
-$warranties = [];
+$sale_id = '';
 $success = false;
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $employee_id = trim($_POST['employee_id'] ?? '');
-    $customer_id = trim($_POST['customer_id'] ?? '');
+// form processing
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
     // Warranties
     if (!empty($_POST['warranties'])) {
@@ -24,61 +21,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ];
         }
     }
+    $sale_id = trim($_POST['sale_id'] ?? '');
 
-    // Validation
-    if (empty($employee_id)) {
-        $error = "Salesperson ID required.";
-    } elseif (empty($customer_id)) {
-        $error = "Customer ID required.";
-    } elseif (empty($warranties)) {
-        $error = "At least one warranty must be added.";
+    $warranty = [
+        'start_date' => trim($_POST['warranties'][0]['start_date'] ?? ''),
+        'end_date' => trim($_POST['warranties'][0]['end_date'] ?? ''),
+        'warranty_type_id' => (int)($_POST['warranties'][0]['warranty_type_id'] ?? 0),
+        'cost' => (float)($_POST['warranties'][0]['cost'] ?? 0),
+        'monthly_cost' => (float)($_POST['warranties'][0]['monthly_cost'] ?? 0),
+        'deductible' => (float)($_POST['warranties'][0]['deductible'] ?? 0)
+    ];
+
+    // error handling
+    if (empty($sale_id)) {
+        $error = "Sale ID required.";
     } else {
         try {
             $conn->beginTransaction();
 
-            // Create a sale record (assuming one vehicle per form)
-            $stmt = $conn->prepare("
-                INSERT INTO sale (vin, customer_id, employee_id, sale_date, sale_price)
-                VALUES (:vin, :customer_id, :employee_id, :sale_date, :sale_price)
+            // get warranty type info
+            $typeStmt = $conn->prepare("
+                SELECT name, items_covered
+                FROM warranty_types
+                WHERE id = :id
+
             ");
-            $stmt->execute([
-                ':vin'          => $_POST['vin'] ?? '',
-                ':customer_id'  => $customer_id,
-                ':employee_id'  => $employee_id,
-                ':sale_date'    => $_POST['sale_date'] ?? date('Y-m-d'),
-                ':sale_price'   => (float)($_POST['sale_price'] ?? 0)
+            $typeStmt->execute([
+                ':id' => $warranty['warranty_type_id']
             ]);
+            $type = $typeStmt->fetch(PDO::FETCH_ASSOC);
 
-            $sale_id = $conn->lastInsertId();
-
-            // Insert warranties
+            // insert the warranty
             $stmt = $conn->prepare("
                 INSERT INTO warranty (sale_id, start_date, end_date, policy_name, items_covered, cost, monthly_cost, deductible)
                 VALUES (:sale_id, :start_date, :end_date, :policy_name, :items_covered, :cost, :monthly_cost, :deductible)
             ");
 
-            foreach ($warranties as $w) {
-                $typeStmt = $conn->prepare("
-                    SELECT name, items_covered
-                    FROM warranty_types
-                    WHERE id = :id
-                ");
-                $typeStmt->execute([
-                    ':id' => $w['warranty_type_id']
-                ]);
-                $type = $typeStmt->fetch(PDO::FETCH_ASSOC);
-
-                $stmt->execute([
-                    ':sale_id'       => $sale_id,
-                    ':start_date'    => $w['start_date'],
-                    ':end_date'      => $w['end_date'],
-                    ':policy_name'   => $type['name'],
-                    ':items_covered' => $type['items_covered'],
-                    ':cost'          => $w['cost'],
-                    ':monthly_cost'  => $w['monthly_cost'],
-                    ':deductible'    => $w['deductible']
-                ]);
-            }
+            $stmt->execute([
+                ':sale_id' => $sale_id,
+                ':start_date' => $warranty['start_date'],
+                ':end_date' => $warranty['end_date'],
+                ':policy_name' => $type['name'],
+                ':items_covered' => $type['items_covered'],
+                ':cost' => $warranty['cost'],
+                ':monthly_cost' => $warranty['monthly_cost'],
+                ':deductible' => $warranty['deductible']
+            ]);
 
             $conn->commit();
             $success = true;
@@ -100,73 +88,77 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <section class="main-content">
 
 
-        <h2>Enter Warranties for Vehicle Sale</h2>
+
+        <h2>Enter Warranty for Vehicle Sale</h2>
 
         <?php if ($success): ?>
-            <p style="color:green;">Warranties saved successfully!</p>
+            <p style="color:green;">Warranty saved successfully!</p>
         <?php elseif ($error): ?>
             <p style="color:red;"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
         <form method="POST">
+
             <h3>Vehicle Info</h3>
-            <label for="vin">VIN:</label>
-            <input type="text" id="vin" name="vin" maxlength="17" required><br><br>
+            <label>Sale ID:</label>
+            <input type="number" name="sale_id" required><br><br>
 
-            <label for="sale_date">Sale Date:</label>
-            <input type="date" id="sale_date" name="sale_date" required><br><br>
+            <h3>Warranty</h3>
 
-            <label for="sale_price">Sale Price:</label>
-            <input type="number" step="0.01" id="sale_price" name="sale_price" required><br><br>
+            <label>Start Date:</label>
+            <input type="date" name="warranties[0][start_date]" required><br>
 
-            <h3>Employee (Salesperson)</h3>
-            <label for="employee_id">Employee ID:</label>
-            <input type="number" id="employee_id" name="employee_id" required><br><br>
+            <label>End Date:</label>
+            <input type="date" name="warranties[0][end_date]" required><br>
 
-            <h3>Customer</h3>
-            <label for="customer_id">Customer ID:</label>
-            <input type="number" id="customer_id" name="customer_id" required><br><br>
+            <label>Warranty Type:</label>
+            <select id="warranty_type" name="warranties[0][warranty_type_id]" required>
+                <option value="">Select Warranty</option>
+                <?php
+                $types = $conn->query("SELECT id, name FROM warranty_types");
+                foreach ($types as $t) {
+                    echo "<option value='{$t['id']}'>{$t['name']}</option>";
+                }
+                ?>
+            </select><br><br>
 
-            <h3>Warranties</h3>
-            <div id="warranties-container"></div>
-            <button type="button" id="add-warranty-btn">Add Warranty</button><br><br>
+            <label>Cost:</label>
+            <input type="number" step="0.01" min="0" name="warranties[0][cost]" required><br>
 
-            <button type="submit">Submit</button>
-        </form>
+            <label>Monthly Cost:</label>
+            <input type="number" step="0.01" min="0" name="warranties[0][monthly_cost]" required><br>
 
-        <script>
-            let warrantyCount = 0;
-            const container = document.getElementById('warranties-container');
 
-            document.getElementById('add-warranty-btn').addEventListener('click', () => {
-                const index = warrantyCount++;
-                const div = document.createElement('div');
-                div.innerHTML = `
-        <hr>
-        <button type="button" onclick="this.parentElement.remove()">Remove</button><br>
-        <label>Start Date:</label>
-        <input type="date" name="warranties[${index}][start_date]" required><br>
-        <label>End Date:</label>
-        <input type="date" name="warranties[${index}][end_date]" required><br>
-        <label>Warranty Type:</label>
-        <select name="warranties[${index}][warranty_type_id]" required>
-            <?php
-            $types = $conn->query("SELECT id, name FROM warranty_types");
-foreach ($types as $t) {
-    echo "<option value='{$t['id']}'>{$t['name']}</option>";
-}
-?>
-        </select><br>
-        <label>Cost:</label>
-        <input type="number" step="0.01" name="warranties[${index}][cost]" required><br>
-        <label>Monthly Cost:</label>
-        <input type="number" step="0.01" name="warranties[${index}][monthly_cost]" required><br>
-        <label>Deductible:</label>
-        <input type="number" step="0.01" name="warranties[${index}][deductible]" required><br>
-    `;
-                container.appendChild(div);
-            });
-        </script>
+            <hr>
+            <button type="button" onclick="this.parentElement.remove()">Remove</button><br>
+            <label>Start Date:</label>
+            <input type="date" name="warranties[${index}][start_date]" required><br>
+            <label>End Date:</label>
+            <input type="date" name="warranties[${index}][end_date]" required><br>
+            <label>Warranty Type:</label>
+            <select name="warranties[${index}][warranty_type_id]" required>
+                <?php
+                $types = $conn->query("SELECT id, name FROM warranty_types");
+                foreach ($types as $t) {
+                    echo "<option value='{$t['id']}'>{$t['name']}</option>";
+                }
+                ?>
+            </select><br>
+            <label>Cost:</label>
+            <input type="number" step="0.01" name="warranties[${index}][cost]" required><br>
+            <label>Monthly Cost:</label>
+            <input type="number" step="0.01" name="warranties[${index}][monthly_cost]" required><br>
+            <label>Deductible:</label>
+            <input type="number" step="0.01" name="warranties[${index}][deductible]" required><br>
+
+            </script>
+    </section>
+    <label>Deductible:</label>
+    <input type="number" step="0.01" min="0" name="warranties[0][deductible]" required><br><br>
+
+    <button type="submit" name="submit_form">Submit</button>
+
+    </form>
     </section>
 </body>
 

@@ -15,13 +15,13 @@ class Payment
 
     public function __construct(array $_post)
     {
-        $this->customer_id = (int) $_post['customer_id'] ?? 0;
-        $this->sale_id = (int) $_post['sale_id'] ?? 0;
+        $this->customer_id = (int) ($_post['customer_id'] ?? 0);
+        $this->sale_id = (int) ($_post['sale_id'] ?? 0);
         $this->payment_date = $_post['payment_date'] ?? '';
         $this->paid_date = $_post['paid_date'];
-        $this->due = (float) $_post['due'] ?? 0;
-        $this->amount = (float) $_post['amount'] ?? 0;
-        $this->bank_id = (int) $_post['bank_id'] ?? 0;
+        $this->due = (float) ($_post['due'] ?? 0);
+        $this->amount = (float) ($_post['amount'] ?? 0);
+        $this->bank_id = (int) ($_post['bank_id'] ?? 0);
     }
 
     public function save($conn): void
@@ -69,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST">
             <h2>Payment Details</h2>
             <label for="customer_id">Customer ID:</label>
-            <input type="number" id="customer_id" name="customer_id" min="0" required><br><br>
+            <input type="number" id="customer_id" name="customer_id" min="0" step="1" required><br><br>
 
             <label for="sale_id">Sale ID:</label>
-            <input type="number" id="sale_id" name="sale_id" min="0" required><br><br>
+            <input type="number" id="sale_id" name="sale_id" min="0" step="1" required><br><br>
 
             <label for="payment_date">Payment Date</label>
             <input type="date" id="payment_date" name="payment_date" required><br><br>
@@ -81,13 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="date" id="paid_date" name="paid_date" required><br><br>
 
             <label for="due">Due</label>
-            <input type="number" id="due" name="due" min="0" required><br><br>
+            <input type="number" id="due" name="due" min="0.01" step="0.01" required><br><br>
 
             <label for="amount">Amount</label>
-            <input type="number" id="amount" name="amount" min="0" required><br><br>
+            <input type="number" id="amount" name="amount" min="0" step="0.01" required><br><br>
 
             <label for="bank_id">Bank ID</label>
-            <input type="number" id="bank_id" name="bank_id" min="0" required><br><br>
+            <input type="number" id="bank_id" name="bank_id" min="0" step="1" required><br><br>
 
             <button type="submit">Submit</button>
         </form>

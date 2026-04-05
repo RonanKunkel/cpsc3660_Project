@@ -91,13 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h3>Identifiers</h3>
 
             <label for="customer_id">Customer ID:</label>
-            <input type="number" id="customer_id" name="customer_id" min="0" required><br><br>
+            <input type="number" id="customer_id" name="customer_id" min="0" step="1" required><br><br>
 
             <label for="vin">VIN:</label>
             <input type="text" id="vin" name="vin" maxlength="17" minlength="17" required><br><br>
 
             <label for="employee_id">Employee ID:</label>
-            <input type="number" id="employee_id" name="employee_id" min="0" required><br><br>
+            <input type="number" id="employee_id" name="employee_id" min="0" step="1" required><br><br>
 
             <h3>Sale Info</h3>
 
@@ -105,16 +105,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="date" id="sale_date" name="sale_date" required><br><br>
 
             <label for="sale_price">Sale Price:</label>
-            <input type="number" id="sale_price" name="sale_price" min="0" required><br><br>
+            <input type="number" id="sale_price" name="sale_price" min="0.01" step="0.01" required><br><br>
 
             <label for="down_payment">Down Payment:</label>
-            <input type="number" id="down_payment" name="down_payment" min="0" required><br><br>
+            <input type="number" id="down_payment" name="down_payment" min="0" step="0.01" required><br><br>
 
             <label for="financed_amount">Financed Amount:</label>
-            <input type="number" id="financed_amount" name="financed_amount" min="0" required><br><br>
+            <input type="number" id="financed_amount" name="financed_amount" min="0" step="0.01" required><br><br>
 
             <label for="commission">Commission:</label>
-            <input type="number" id="commission" name="commission" min="0" required><br><br>
+            <input type="number" id="commission" name="commission" min="0" step="0.01" required><br><br>
 
             <button type="submit">Submit</button>
         </form>

@@ -1,9 +1,14 @@
 <?php
-session_start();
 include '../config/db.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
 $user_id = $_SESSION['user_id'] ?? null;
+$current_vin = $_GET['vin'] ?? '';
 $vehicles = [];
+
 if ($user_id) {
     $stmt = $conn->prepare("
         SELECT v.make, v.model, s.vin 
@@ -32,7 +37,8 @@ if ($user_id) {
       <select name="vehicle" id="vehicle">
         <option value="">Select Vehicle</option>
         <?php foreach ($vehicles as $v): ?>
-          <option value="<?= $v['vin'] ?>"><?= htmlspecialchars($v['make']) ?> <?= htmlspecialchars($v['model']) ?></option>
+          <option value="<?= htmlspecialchars($v['vin']) ?>" <?= ($current_vin === $v['vin']) ? 'selected' : '' ?>> <?= htmlspecialchars($v['make']) ?> <?= htmlspecialchars($v['model']) ?>
+          </option>
         <?php endforeach; ?>
       </select>
     </div>

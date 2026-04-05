@@ -65,32 +65,36 @@ if ($vin) {
             <div>
                 <h2><?php echo htmlspecialchars($vehicleInfo['year']) . ' ' . htmlspecialchars($vehicleInfo['make']) . ' ' . htmlspecialchars($vehicleInfo['model']); ?></h2>
 
-                <p><strong>VIN:</strong> <?php echo htmlspecialchars($vehicleInfo['vin']); ?></p>
-                <p><strong>Color:</strong> <?php echo htmlspecialchars($vehicleInfo['color']); ?></p>
-                <p><strong>Interior Color:</strong> <?php echo htmlspecialchars($vehicleInfo['interior_color']); ?></p>
-                <p><strong>Miles:</strong> <?php echo htmlspecialchars($vehicleInfo['miles']); ?></p>
-                <p><strong>Style:</strong> <?php echo htmlspecialchars($vehicleInfo['style']); ?></p>
-                <p><strong>Condition:</strong> <?php echo htmlspecialchars($vehicleInfo['vehicle_condition']); ?></p>
+                <div>
+                    <h2><?php echo htmlspecialchars($vehicleInfo['YEAR']) . ' ' . htmlspecialchars($vehicleInfo['make']) . ' ' . htmlspecialchars($vehicleInfo['model']); ?></h2>
 
-                <?php if ($sale): ?>
-                    <p><strong>Sale Price:</strong> $<?php echo htmlspecialchars(number_format($sale['sale_price'], 2)); ?></p>
-                    <p><strong>Amount Paid:</strong> $<?php echo htmlspecialchars(number_format($sale['down_payment'] + $payments, 2)); ?></p>
-                    <p><strong>Amount Left to Pay:</strong> $<?php echo htmlspecialchars(number_format($sale['financed_amount'] - $payments, 2)); ?></p>
-                <?php endif; ?>
+                    <p><strong>VIN:</strong> <?php echo htmlspecialchars($vehicleInfo['vin']); ?></p>
+                    <p><strong>Color:</strong> <?php echo htmlspecialchars($vehicleInfo['color']); ?></p>
+                    <p><strong>Interior Color:</strong> <?php echo htmlspecialchars($vehicleInfo['interior_color']); ?></p>
+                    <p><strong>Miles:</strong> <?php echo htmlspecialchars($vehicleInfo['miles']); ?></p>
+                    <p><strong>Style:</strong> <?php echo htmlspecialchars($vehicleInfo['style']); ?></p>
+                    <p><strong>Condition:</strong> <?php echo htmlspecialchars($vehicleInfo['vehicle_condition']); ?></p>
 
-                <?php if ($warranty): ?>
-                    <h3>Current Warranty</h3>
-                    <p><strong>Policy Name:</strong> <?php echo htmlspecialchars($warranty['policy_name']); ?></p>
-                    <p><strong>Items Covered:</strong> <?php echo htmlspecialchars($warranty['items_covered']); ?></p>
-                    <p><strong>Monthly Cost:</strong> $<?php echo htmlspecialchars(number_format($warranty['monthly_cost'], 2)); ?></p>
-                    <p><strong>Deductible:</strong> $<?php echo htmlspecialchars(number_format($warranty['deductible'], 2)); ?></p>
-                    <p><strong>Start Date:</strong> <?php echo htmlspecialchars($warranty['start_date']); ?></p>
-                    <p><strong>End Date:</strong> <?php echo htmlspecialchars($warranty['end_date']); ?></p>
-                <?php endif; ?>
-            </div>
-        <?php else: ?>
-            <p>No vehicle information found.</p>
-        <?php endif; ?>
+                    <?php if ($sale): ?>
+                        <p><strong>Sale Price:</strong> $<?php echo htmlspecialchars(number_format($sale['sale_price'], 2)); ?></p>
+                        <p><strong>Amount Left to Pay:</strong> $<?php echo htmlspecialchars(number_format($sale['sale_price'] - ($sale['down_payment'] + $payments), 2)); ?></p>
+                        <p><strong>Amount Paid:</strong> $<?php echo htmlspecialchars(number_format($sale['down_payment'] + $payments, 2)); ?></p>
+
+                    <?php endif; ?>
+
+                    <?php if ($warranty): ?>
+                        <h3>Current Warranty</h3>
+                        <p><strong>Policy Name:</strong> <?php echo htmlspecialchars($warranty['policy_name']); ?></p>
+                        <p><strong>Items Covered:</strong> <?php echo htmlspecialchars($warranty['items_covered']); ?></p>
+                        <p><strong>Monthly Cost:</strong> $<?php echo htmlspecialchars(number_format($warranty['monthly_cost'], 2)); ?></p>
+                        <p><strong>Deductible:</strong> $<?php echo htmlspecialchars(number_format($warranty['deductible'], 2)); ?></p>
+                        <p><strong>Start Date:</strong> <?php echo htmlspecialchars($warranty['start_date']); ?></p>
+                        <p><strong>End Date:</strong> <?php echo htmlspecialchars($warranty['end_date']); ?></p>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <p>No vehicle information found.</p>
+            <?php endif; ?>
     </section>
 
 </body>
