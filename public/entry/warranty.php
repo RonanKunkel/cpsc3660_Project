@@ -8,19 +8,6 @@ $error = '';
 // form processing
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
-    // Warranties
-    if (!empty($_POST['warranties'])) {
-        foreach ($_POST['warranties'] as $w) {
-            $warranties[] = [
-                'start_date' => trim($w['start_date'] ?? ''),
-                'end_date' => trim($w['end_date'] ?? ''),
-                'warranty_type_id' => (int)($w['warranty_type_id'] ?? 0),
-                'cost'          => (float)($w['cost'] ?? 0),
-                'monthly_cost'  => (float)($w['monthly_cost'] ?? 0),
-                'deductible'    => (float)($w['deductible'] ?? 0)
-            ];
-        }
-    }
     $sale_id = trim($_POST['sale_id'] ?? '');
 
     $warranty = [
@@ -44,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
                 SELECT name, items_covered
                 FROM warranty_types
                 WHERE id = :id
-
             ");
             $typeStmt->execute([
                 ':id' => $warranty['warranty_type_id']
@@ -80,14 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
 
 <!DOCTYPE html>
 <html>
-
 <?php include('../../templates/head.php'); ?>
 
 <body>
     <?php include('../../templates/header.php'); ?>
+
     <section class="main-content">
-
-
 
         <h2>Enter Warranty for Vehicle Sale</h2>
 
@@ -128,37 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_form'])) {
             <label>Monthly Cost:</label>
             <input type="number" step="0.01" min="0" name="warranties[0][monthly_cost]" required><br>
 
-
-            <hr>
-            <button type="button" onclick="this.parentElement.remove()">Remove</button><br>
-            <label>Start Date:</label>
-            <input type="date" name="warranties[${index}][start_date]" required><br>
-            <label>End Date:</label>
-            <input type="date" name="warranties[${index}][end_date]" required><br>
-            <label>Warranty Type:</label>
-            <select name="warranties[${index}][warranty_type_id]" required>
-                <?php
-                $types = $conn->query("SELECT id, name FROM warranty_types");
-                foreach ($types as $t) {
-                    echo "<option value='{$t['id']}'>{$t['name']}</option>";
-                }
-                ?>
-            </select><br>
-            <label>Cost:</label>
-            <input type="number" step="0.01" name="warranties[${index}][cost]" required><br>
-            <label>Monthly Cost:</label>
-            <input type="number" step="0.01" name="warranties[${index}][monthly_cost]" required><br>
             <label>Deductible:</label>
-            <input type="number" step="0.01" name="warranties[${index}][deductible]" required><br>
+            <input type="number" step="0.01" min="0" name="warranties[0][deductible]" required><br><br>
 
-            </script>
-    </section>
-    <label>Deductible:</label>
-    <input type="number" step="0.01" min="0" name="warranties[0][deductible]" required><br><br>
+            <button type="submit" name="submit_form">Submit</button>
 
-    <button type="submit" name="submit_form">Submit</button>
-
-    </form>
+        </form>
     </section>
 </body>
 
