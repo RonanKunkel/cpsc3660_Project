@@ -1,5 +1,5 @@
 <?php
-require '../config/db.php';
+require '../../config/db.php';
 
 
 $sale_id = $employee_id = $customer_id = '';
@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST['warranties'])) {
         foreach ($_POST['warranties'] as $w) {
             $warranties[] = [
-                'start_date'    => trim($w['start_date'] ?? ''),
-                'end_date'      => trim($w['end_date'] ?? ''),
+                'start_date' => trim($w['start_date'] ?? ''),
+                'end_date' => trim($w['end_date'] ?? ''),
                 'warranty_type_id' => (int)($w['warranty_type_id'] ?? 0),
                 'cost'          => (float)($w['cost'] ?? 0),
                 'monthly_cost'  => (float)($w['monthly_cost'] ?? 0),
@@ -93,10 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/header.php'); ?>
+    <?php include('../../templates/header.php'); ?>
     <section class="main-content">
 
 
@@ -152,10 +152,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <select name="warranties[${index}][warranty_type_id]" required>
             <?php
             $types = $conn->query("SELECT id, name FROM warranty_types");
-            foreach ($types as $t) {
-                echo "<option value='{$t['id']}'>{$t['name']}</option>";
-            }
-            ?>
+foreach ($types as $t) {
+    echo "<option value='{$t['id']}'>{$t['name']}</option>";
+}
+?>
         </select><br>
         <label>Cost:</label>
         <input type="number" step="0.01" name="warranties[${index}][cost]" required><br>

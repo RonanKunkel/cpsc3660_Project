@@ -1,6 +1,7 @@
 <?php
-session_start();
 include '../config/db.php';
+session_start();
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_type = $_POST['user_type'];
@@ -16,7 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt->fetch()) {
                 $_SESSION['user_type'] = $user_type;
                 $_SESSION['user_id'] = $user_id;
-                header("Location: $user_type.php");
+                if ($user_type === 'customer') {
+                    header("Location: ../public/view/customerHome.php");
+                    exit;
+                }
+
+                if ($user_type === 'employee') {
+                    header("Location: ../public/view/employeeHome.php");
+                    exit;
+                }
                 exit;
             } else {
                 $error = "Invalid $user_type ID.";
@@ -24,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } elseif ($user_type == 'admin') {
         $_SESSION['user_type'] = 'admin';
-        header("Location: admin.php");
+        header("Location: ../public/view/adminHome.php");
         exit;
     } else {
         $error = "Please select a user type.";
@@ -35,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <?php include '../templates/head.php'; ?>
+
 <body>
     <section id="heading">
         <header>
@@ -46,7 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <main style="padding: 20px;">
         <h2>Login</h2>
-        <?php if (isset($error)) echo "<p style='color: red;'>$error</p>"; ?>
+        <?php if (isset($error)) {
+            echo "<p style='color: red;'>$error</p>";
+        } ?>
         <form method="post">
             <label>
                 <input type="radio" name="user_type" value="customer" onclick="showIdInput()"> Customer
@@ -72,10 +84,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.getElementById('id_input').style.display = 'block';
             document.getElementById('user_id').required = true;
         }
+
         function hideIdInput() {
             document.getElementById('id_input').style.display = 'none';
             document.getElementById('user_id').required = false;
         }
     </script>
 </body>
+
 </html>

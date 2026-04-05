@@ -1,5 +1,5 @@
 <?php
-require '../config/db.php';
+require '../../config/db.php';
 
 // Set filter defaults
 $make = isset($_GET['make']) && $_GET['make'] !== '' ? (string)$_GET['make'] : '%';
@@ -58,10 +58,10 @@ $inventory = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/header.php'); ?>
+    <?php include('../../templates/header.php'); ?>
     <section class="main-content">
         <div>
             <h2>Inventory:</h2>

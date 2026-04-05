@@ -1,5 +1,5 @@
 <?php
-require '../config/db.php';
+require '../../config/db.php';
 
 // sale
 $sale_date = $sale_price = $down_payment = $financed_amount = $commission  = '';
@@ -74,11 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
 
-    <?php include('../templates/header.php'); ?>
+    <?php include('../../templates/header.php'); ?>
     <section class="main-content">
         <?php if ($success): ?>
             <p class="success">Vehicle sold and saved successfully!</p>

@@ -1,6 +1,6 @@
 <?php
 
-require '../config/db.php';
+require '../../config/db.php';
 
 
 class Payment
@@ -61,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/header.php'); ?>
+    <?php include('../../templates/header.php'); ?>
     <section class="main-content">
         <form method="POST">
             <h2>Payment Details</h2>

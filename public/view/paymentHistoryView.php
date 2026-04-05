@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'customer') {
     exit;
 }
 
-require '../config/db.php';
+require '../../config/db.php';
 
 $vin = $_GET['vin'] ?? null;
 $payments = [];
@@ -42,32 +42,32 @@ if ($vin) {
 <!DOCTYPE html>
 <html>
 
-<?php include('../templates/head.php'); ?>
+<?php include('../../templates/head.php'); ?>
 
 <body>
-    <?php include('../templates/customerHeader.php'); ?>
-    <section class="main-content" style="padding: 20px;">
+    <?php include('../../templates/customerHeader.php'); ?>
+    <section class="main-content">
         <h1>Payment History</h1>
         <?php if (isset($next_payment)): ?>
             <p><strong>Next Payment:</strong> <?php echo htmlspecialchars($next_payment); ?> - <strong>Amount Due:</strong> $<?php echo htmlspecialchars(number_format($amount_due, 2)); ?></p>
         <?php endif; ?>
         <?php if ($payments): ?>
-            <table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+            <table>
                 <thead>
-                    <tr style="background-color: #f2f2f2;">
-                        <th style="border: 1px solid #ddd; padding: 8px;">Payment Due Date</th>
-                        <th style="border: 1px solid #ddd; padding: 8px;">Amount Due</th>
-                        <th style="border: 1px solid #ddd; padding: 8px;">Paid Date</th>
-                        <th style="border: 1px solid #ddd; padding: 8px;">Amount</th>
+                    <tr>
+                        <th>Payment Due Date</th>
+                        <th>Amount Due</th>
+                        <th>Paid Date</th>
+                        <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($payments as $payment): ?>
                         <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px;"><?php echo htmlspecialchars($payment['payment_date']); ?></td>
-                            <td style="border: 1px solid #ddd; padding: 8px;">$<?php echo htmlspecialchars(number_format($payment['amount'], 2)); ?></td>
-                            <td style="border: 1px solid #ddd; padding: 8px;"><?php echo htmlspecialchars($payment['paid_date']); ?></td>
-                            <td style="border: 1px solid #ddd; padding: 8px;">$<?php echo htmlspecialchars(number_format($payment['amount'], 2)); ?></td>
+                            <td><?php echo htmlspecialchars($payment['payment_date']); ?></td>
+                            <td>$<?php echo htmlspecialchars(number_format($payment['amount'], 2)); ?></td>
+                            <td><?php echo htmlspecialchars($payment['paid_date']); ?></td>
+                            <td>$<?php echo htmlspecialchars(number_format($payment['amount'], 2)); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

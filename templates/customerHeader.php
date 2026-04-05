@@ -40,14 +40,14 @@ if ($user_id) {
 </section>
 
 <script>
-function checkVehicle(event, page) {
+  function checkVehicle(event, page) {
     var vin = document.getElementById('vehicle').value;
     if (!vin) {
-        event.preventDefault();
-        alert('Please select a vehicle first.');
+      event.preventDefault();
+      alert('Please select a vehicle first.');
     } else {
-        window.location.href = page + '?vin=' + vin;
-        event.preventDefault();
+      window.location.href = page + '?vin=' + vin;
+      event.preventDefault();
     }
-}
+  }
 </script>
