@@ -79,7 +79,7 @@ $latePayments = $stmt->fetchColumn();
 
 // Display late payment customers
 $stmt = $conn->prepare("
-    SELECT c.lastName, c.firstName, c.phone
+    SELECT c.last_name, c.first_name, c.phone
     FROM payment AS p
     NATURAL JOIN customer AS c
     WHERE YEAR(p.paid_date) = YEAR(CURDATE() - INTERVAL 1 MONTH)
@@ -143,7 +143,7 @@ $latePayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Payments:</h2>
         <p>Number of Payments Made: <?php echo $paymentCount; ?></p>
         <p>Total Amount Payed: <?php echo $paymentSum; ?></p>
-        <p>Number of Late Payments: <?php echo $latePayments; ?></p>
+        <p>Number of Late Payments: <?php echo $latePayments; ?></p><br><br>
         <table border="1">
             <tr>
                 <th>First Name</th>
@@ -152,8 +152,8 @@ $latePayers = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
             <?php foreach ($latePayers as $row): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['firstName']); ?></td>
-                    <td><?php echo htmlspecialchars($row['lastName']); ?></td>
+                    <td><?php echo htmlspecialchars($row['first_name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['last_name']); ?></td>
                     <td><?php echo htmlspecialchars($row['phone']); ?></td>
                 </tr>
             <?php endforeach; ?>
