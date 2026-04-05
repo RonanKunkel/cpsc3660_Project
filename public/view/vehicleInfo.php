@@ -63,7 +63,7 @@ if ($vin) {
         <h1>Vehicle Information</h1>
         <?php if ($vehicleInfo): ?>
             <div>
-                <h2><?php echo htmlspecialchars($vehicleInfo['year']) . ' ' . htmlspecialchars($vehicleInfo['make']) . ' ' . htmlspecialchars($vehicleInfo['model']); ?></h2>
+                <h2><?php echo htmlspecialchars($vehicleInfo['YEAR']) . ' ' . htmlspecialchars($vehicleInfo['make']) . ' ' . htmlspecialchars($vehicleInfo['model']); ?></h2>
 
                 <p><strong>VIN:</strong> <?php echo htmlspecialchars($vehicleInfo['vin']); ?></p>
                 <p><strong>Color:</strong> <?php echo htmlspecialchars($vehicleInfo['color']); ?></p>
