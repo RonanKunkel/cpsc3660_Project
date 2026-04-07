@@ -3,10 +3,10 @@
 ### Winter 2026
 
 **Members:** 
-	<u>Andriy Zynyuk</u> - 001242739
-	Ronan Kunkel - 001245952
-	James - 001240091
-	Kyle Bjerstedt - 001228726
+	<u>Andriy Zynyuk</u> - 001242739  
+	Ronan Kunkel - 001245952  
+	James - 001240091  
+	Kyle Bjerstedt - 001228726  
 
 ## How to Use:
 1. Log in as Admin, Employee, Customer.
