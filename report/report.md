@@ -6,7 +6,7 @@
 	Andriy Zynyuk - 001242739
 	Ronan
 	James - 001240091
-	Kyle
+	Kyle Bjerstedt - 001228726
 
 ## How to Use:
 
@@ -50,6 +50,7 @@ After getting the functionality of the website down, we extensively tested every
 7. Monthly Report
 
 ## Assumptions Made:
+1. The dealership will not buy the same car twice.
 
 ## What we Learned:
 1. Creating and Using DB
