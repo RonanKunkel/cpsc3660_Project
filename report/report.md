@@ -31,6 +31,8 @@ We developed more views that would be useful for the users of this project such 
 After getting the functionality of the website down, we extensively tested everything to make sure it works, and interacts correctly with our DB. At this point we were fixing bugs and polishing the project down to get it ready to hand in.
 
 ## ER Diagram:
+![[../assets/images/entity_and_relationship_only.png]]
+![[../assets/images/full_ER_diagram.png]]
 
 ## Input Forms:
 1. Purchase Car
