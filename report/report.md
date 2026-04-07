@@ -2,7 +2,7 @@
 ---
 ### Winter 2026
 
-**Members:** 
+**Members:**  
 	<u>Andriy Zynyuk</u> - 001242739  
 	Ronan Kunkel - 001245952  
 	James - 001240091  
