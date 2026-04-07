@@ -3,12 +3,16 @@
 ### Winter 2026
 
 **Members:** 
-	Andriy Zynyuk - 001242739
-	Ronan
+	<u>Andriy Zynyuk</u> - 001242739
+	Ronan Kunkel - 001245952
 	James - 001240091
 	Kyle Bjerstedt - 001228726
 
 ## How to Use:
+1. Log in as Admin, Employee, Customer.
+2. Add information to anything available to you.
+   Ex. you are a Customer trying to see the payment history and vehicle information as well as make a payment on a vehicle. sign in with your ID, select your vehicle in the top right of the page. Once the vehicle is selected you can click on the labels at the top of the page to be brought to the page relevent to seeing the information on the vehicle as well as the payment history. Finally, you can click the Make Payment button to be brought to the page that allow you to fill in the amount you are paying and Bank ID the payment will come from. Hit the Submit Payment button at the bottom and the database will save your payment.
+3. Log out.
 
 ## Development Stages:
 **1. Overall Design and ER Diagram design**
