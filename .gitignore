@@ -1,3 +1,4 @@
 .DS_store
 .vscode
 .php-cs-fixer.cache
+.idea
