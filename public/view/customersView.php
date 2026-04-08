@@ -25,6 +25,7 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div>
             <table border="1">
                 <tr>
+                    <th>ID</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Gender</th>
@@ -37,6 +38,7 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
                 <?php foreach ($customers as $row): ?>
                     <tr>
+                        <td><?php echo htmlspecialchars($row['id']); ?></td>
                         <td><?php echo htmlspecialchars($row['first_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['last_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['gender']); ?></td>
