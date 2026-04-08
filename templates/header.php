@@ -1,6 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
 
 $user_type = $_SESSION['user_type'] ?? null;
@@ -17,7 +17,7 @@ if ($user_type === 'customer') {
 <section id="heading">
   <header>
     <div class="navbar-container">
-      <h1><a>Jones Auto</a></h1>
+      <h1>Jones Auto</h1>
     </div>
     <div class="navbar-container">
       <nav>
@@ -32,6 +32,8 @@ if ($user_type === 'customer') {
           <a href="../../public/entry/carSales.php" class="_page">Sell Vehicle</a>
           <a href="../../public/entry/warranty.php" class="_page">Add Warranty</a>
           <a href="../../public/view/inventoryView.php" class="_page">Inventory</a>
+          <a href="../../public/view/customerEmployersView.php" class="_page">See 'x' Customer Employers</a>
+          <a href="../../public/entry/payments.php" class="_page">Create Payment</a>
         <?php elseif ($user_type === 'admin'): ?>
           <a href="../../public/entry/purchaseCar.php" class="_page">Purchase Vehicle</a>
           <a href="../../public/entry/addCustomer.php" class="_page">Add Customer</a>
@@ -45,6 +47,7 @@ if ($user_type === 'customer') {
           <a href="../../public/view/vehicleInfo.php" class="_page">Vehicle Info</a>
           <a href="../../public/view/vehiclesView.php" class="_page">Vehicles</a>
           <a href="../../public/view/customersView.php" class="_page">Customers</a>
+          <a href="../../public/view/customerEmployersView.php" class="_page">See 'x' Customer Employers</a>
         <?php else: ?>
           <a href="/public/index.php" class="_page">Login</a>
         <?php endif; ?>
